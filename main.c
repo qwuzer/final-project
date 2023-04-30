@@ -10,7 +10,18 @@
 //7: Robber - no resource
 enum TileType{ Tile-Hills = 1, Tile-Fields , Tile-Pasture, Tile-Forest, Tile-Mountains, Tile-Desert , Tile-Robber };
 
-int32_t tile[19];//1-7
+int32_t tile_type[19];//1-7 
+//{ 5 , 2 , 2 , 4 , 1 , 2 , 3 , 3 , .... };
+
+int32_t tile_dice_num[18] = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 , 9 , 4 , 5 , 6 , 3 , 11 };//2-12
+//{A-5} {B-2} {C-6} {D-3} {E-8} {F-10} {G-9} {H-12} {I-11} {J-4} {K-8} {L-10} {M-9} {N-4} {O-5} {P-6} {Q-3} {R-11} 
+
+typedef struct _sTile
+{
+    int32_t index;//1-19
+    int32_t type;//1-7
+    int32_t dice_num;//2-12
+}tile;
 
 typedef struct _sNode
 {
@@ -21,9 +32,9 @@ typedef struct _sNode
     /* 
              1          3 
             /            \
-      3 ㄧ *    or.       * ㄧ 1
-           \            /
-           2           2
+      3 ㄧ *      or      * ㄧ 1
+            \            /
+             2          2
     */
     struct _sNode* dir1;
     struct _sNode* dir2;
