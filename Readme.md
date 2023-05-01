@@ -51,7 +51,7 @@ typedef struct _sNode
 ``` C
 enum TileType{ Tile-Hills = 1, Tile-Fields , Tile-Pasture, Tile-Forest, Tile-Mountains, Tile-Desert , Tile-Robber };
 
-int32_t tile_type[19];//1-7 
+int32_t tile_type[19];//1-6
 //{ 5 , 2 , 2 , 4 , 1 , 2 , 3 , 3 , .... };
 
 int32_t tile_dice_num[18] = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 , 9 , 4 , 5 , 6 , 3 , 11 };//2-12
@@ -61,6 +61,7 @@ typedef struct _sTile
 {
     int32_t index;//1-19
     int32_t type;//1-7
+    int32_t robber;//0,1
     int32_t dice_num;//2-12
 }tile;
 
