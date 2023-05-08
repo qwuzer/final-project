@@ -4,7 +4,7 @@
 #include <time.h>
 #include "struct.h"
 #include "color.h"
-
+#include "init.h"
 
 //generate random number
 int32_t roll_dice()
@@ -19,9 +19,29 @@ int32_t roll_dice()
 //check if any player has settlement on the number
 //if yes, give the player resources
 //check robber! -> reduce resources 
-void obtain_resources( int32_t sum , Player *player[] )/*use player array? : struct player (*player)[]*/
+void obtain_resources( int32_t sum , Player *player[] , tile *ptile )
 {
-    
+    for( int32_t i = 0 ; i < 19 ; i++ )
+    {
+        if( ptile[i].dice_num == sum && robber != 1 )
+        {
+            for( int32_t j = 0 ; j < 6 ; j++ )
+            {
+                if( ptile[i].node[j].owner != 0 )//if there is a building on the node
+                {
+                    if( ptile[i].node[j].type = 1 )//settlment 
+                    {
+                        player[ptile[i].node[j].owner].resource[ptile[i].resource_type] += ptile[i].recsource[j];
+                    }
+                    else if( ptile[i].node[j].type = 2 )//city
+                    {
+                        player[ptile[i].node[j].owner].resource[ptile[i].resource_type] += (ptile[i].recsource[j] * 2);
+                    }
+                    
+                }
+            }
+        }
+    }
 }
 
 //check if any player has 10 points
@@ -43,7 +63,7 @@ int32_t is_game_over( Player *players[] )
 enum options {  buy_dev_card = 0 , use_dev_card = 1 , trade_with_player , marine_trade , build_settlement , build_road , build_city };
 int32_t option[6] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 };
 
-void print_option_menu( int32_t option[] , size_t size )
+int32_t print_option_menu( int32_t option[] , size_t size )
 {
     int32_t ret = 0;
     printf("Please select an option:\n");
@@ -83,6 +103,12 @@ void print_option_menu( int32_t option[] , size_t size )
         }
     }
 
+    if( index == 1 )
+    {
+        printf("No option available!\n");
+        return -1;
+    }
+
     printf("----------------------------\n")
     printf("Please enter your option: ");
     scanf("%d",&ret);
@@ -101,7 +127,7 @@ void print_option_menu( int32_t option[] , size_t size )
 int32_t if_settlement_on_port( Player player )
 {
     //if( player.settlement_index = port ) ---> additional info in player?
-    /*
+    
     for( int32_t i = 0 ; i < 18 ; i++ )//18 ports
     {
         if( node[i].owner == player.index && node[i] == port )
@@ -114,7 +140,7 @@ int32_t if_settlement_on_port( Player player )
         }
     }
     return 0;
-    */
+    
 }
 
 
@@ -193,14 +219,16 @@ int32_t build_settlement( Player player )
 }
 
 //remember to minus settlement_num!!!
+//check if any player has 2 wheat, 3 ore
 build_city()
 {
-    //check if any player has 2 wheat, 3 ore
+    
 }
 
+//check if any player has 1 wood, 1 brick
 build_road()
 {
-    //check if any player has 1 wood, 1 brick
+    
 }
 
 
@@ -237,6 +265,12 @@ use_dev_card()
 
 int main ()
 {
+    Player *player[4];
+    for(int32_t i = 0 ; i < 4 ; i++ )
+    {
+        player[i] = (Player*)malloc(sizeof(Player));
+    }
+
     int32_t turn = 1;
     int32_t game_not_over = 1;
     while( 1 ) 
@@ -245,6 +279,15 @@ int main ()
         {
             case 1:
                 printf( "Player 1's turn\n" );
+                int32_t choice;
+                while( (choice = print_option_menu( option , 6 )) != -1 )
+                {
+                    switch(choice)
+                    {
+                        case 1:
+                            if( able_buy_dev_card(player1) )
+                    }
+                }
                 is_game_over();
                 print_option_menu( option , 6 );
                 break;
@@ -260,6 +303,12 @@ int main ()
             default:
                 break;
         }
+    }
+
+
+    for( int32_t i = 0 ; i < 4 ; i++ )
+    {
+        free(player[i]);
     }
     return 0;
 }
