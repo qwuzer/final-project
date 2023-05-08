@@ -45,10 +45,9 @@ typedef struct _sNode
 typedef struct _sTile
 {
     int32_t index;//1-19
-    int32_t type;//1-6
+    int32_t resource_type;//1-6(represents terrain also resources)
     int32_t robber;//0,1
     int32_t dice_num;//2-12
-    int32_t resoource_type;//0-4
     struct _sNode* nodes[6]; 
 }tile;
 
