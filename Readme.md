@@ -60,10 +60,60 @@ int32_t tile_dice_num[18] = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 
 typedef struct _sTile
 {
     int32_t index;//1-19
-    int32_t type;//1-7
+    int32_t resource_type;//1-6(represents terrain also resources)
     int32_t robber;//0,1
     int32_t dice_num;//2-12
+    struct _sNode* nodes[6]; 
 }tile;
 
 ```
 
+##### player 
+``` C
+enum Resource{ Brick = 0 , Grain , Sheep , Lumber , Ore };
+
+typedef struct _sPlayer
+{
+    int32_t index;//0-3
+    int32_t color;//0-3
+    int32_t resource[5];//0-4
+    int32_t victory_point;//0-10
+    int32_t road_num;//0-15
+    int32_t settlement_num;//0-5  
+    int32_t building_index[54];//0-53 0,1,2
+    int32_t city_num;//0-4
+    int32_t knight_num;//0-5
+    int32_t longest_road;//0,1
+    int32_t largest_army;//0,1
+}Player;
+```
+
+Playing Procedure
+---
+
+For every turn of each player, the procedure will break down into 4 states as the following list shows 
+
+1. ROLLING DICE:
+    As simple as it seems, the player will roll two dices of 6 to obtain resources.
+    
+2. CHECK STATE: 
+     Checking whether the player is able to perform any of the 7 following options
+- [ ] Buy development card
+- [ ] Use development card
+- [ ] Trade with other players
+- [ ] Marine trade
+- [ ] Build settlements
+- [ ] Build city
+- [ ] Build road
+
+
+3. EXECUTE STATE:
+    Any options that is offered and selected will be performed
+    
+4. GAMEOVER PENDING:
+    After any option is successfully performed, the program will check if the winning condition is met, and thus end the game accordingly.
+
+After all these states are over, depending on the player's status, the game will either go on to the next player or either the player voluntarily quit its turn and move on. 
+
+* Beware that the states are not neccessarily performed in the preceeding sequent, for example,  one may use development card before rolling the dice.
+    
