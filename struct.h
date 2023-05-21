@@ -67,6 +67,7 @@ typedef struct _sPlayer
     int32_t knight_num;//0-5
     int32_t longest_road;//0,1
     int32_t largest_army;//0,1
+    /*TODO add dev card type*/
 }Player;
 
 
@@ -80,4 +81,6 @@ typedef struct _sRoad
     struct _sRoad* dir2;
     struct _sRoad* dir3;
     struct _sRoad* dir4;
+    struct _sNode* node1;
+    struct _sNode* node2;
 }road;

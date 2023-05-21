@@ -188,12 +188,22 @@ int32_t player_trade( struct player player )
 //other restrictions? e.g development card can only be used once per turn
 int32_t is_able_to( Player *player )
 {
+    //reset the options 
+    for( int32_t i = 0 ; i < 7 ; i++ )
+    {
+        option[i] = 0;
+    }
+
+    /*checks the card pile is still available*/
+    /*TODO*/
     if( player->sheep >= 1 && player->wheat >= 1 && player->ore >= 1 )
     {
         option[buy_dev_card] = 1;
         return 1;
     }
 
+    /*check if the dev card is usable in this round*/
+    /*TODO*/
     if( player->dev_card_num >= 1 )
     {
         option[use_dev_card] = 1;
@@ -244,35 +254,125 @@ void print_build( Player player )
 
 //check if any player has 1 wood, 1 brick, 1 sheep, 1 wheat
 //offer mutiple times in the same turn if condition is met
-int32_t build_settlement( Player player )
+void build_settlement( Player *player , road *road )
 {
+    /*Iterate thru node and flash the node that is available, provide the index*/
+    int32_t build_index[54] = {0};
+
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        if( road->owner == 0 ){
+            continue;
+        }
+        else{
+            node *tmp1 = road->node1->owner;
+            node *tmp2 = road->node2->owner;
+            if( tmp1->dir1->owner == 0 && tmp1->dir2->owner == 0 && tmp->dir3->owner == 0 ){
+                build_index[tmp1->index] = 1;
+            }
+            if( tmp2->dir1->owner == 0 && tmp2->dir2->owner == 0 && tmp->dir3->owner == 0 ){
+                build_index[tmp2->index] = 1;
+            }
+        }
+    }
+
     printf("Select a place to build your settlement:\n");
+    /*TODO*/
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 54 || select < 1 )
+    {
+        printf("Invalid input!\n");
+        build_settlement( player );
+    }
 
     player.wood -= 1;
     player.brick -= 1;
     player.sheep -= 1;
     player.wheat -= 1;
 
-    option[build_settlement] = 0;
+    //option[build_settlement] = 0;
 }
 
 //remember to minus settlement_num!!!
 //check if any player has 2 wheat, 3 ore
-build_city()
+void build_city( Player player , node *pnode )
 {
-    
+    /*Iterate thru node and flash the node that is available, provide the index*/
+    int32_t build_index[54] = {0};
+
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        if( pnode[i]->owner != player->index  ){
+            continue;
+        }
+        else{
+            if( pnode[i]->type == 1 ){
+                build_index[i] = 1;
+            }
+        }
+    }
+
+    printf("Select a place to build your city:\n");
+    /*TODO*/
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 54 || select < 1 )
+    {
+        printf("Invalid input!\n");
+        build_settlement( player );
+    }
+
+    player->wheat -= 2;
+    player->ore -= 3;
+
+    return;
 }
 
 //check if any player has 1 wood, 1 brick
-build_road()
+void build_road( Player player , road *road )
 {
-    
+    /*Iterate thru node and flash the node that is available, provide the index*/
+    int32_t road_index[72] = {0};
+
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        if( road->owner == 0 ){
+            continue;
+        }
+        else{
+            if( road->dir1->owner == player->index || road->dir2->owner == player->index || road->dir3->owner == player->index || road->dir4->owner == player->index ){
+                road_index[road->node1->index] = 1;
+            }
+        }
+    }
+
+    printf("Select a place to build your road:\n");
+    /*TODO*/
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 54 || select < 1 )
+    {
+        printf("Invalid input!\n");
+        build_settlement( player );
+    }
+
+    player->wheat -= 2;
+    player->ore -= 3;
+
+    return;
 }
 
-//check if dev is obtained in the same turn, if yes, unable to use
-buy_dev_card()
+//check if dev is obtained in the same turn
+void buy_dev_card( Player player )
 {
-    //check if any player has 1 sheep, 1 wheat, 1 ore
+    player.sheep -= 1;
+    player.wheat -= 1;
+    player.ore -= 1;
+    //add card to player's hand
+    
+    //turn off the option //player is able to buy mutliple cards if condition is met
+    //option[buy_dev_card] = 0; 
 }
 
 use_dev_card()
@@ -288,6 +388,10 @@ int main ()
         player[i] = (Player*)malloc(sizeof(Player));
     }
 
+    node *pNode = init_node();
+    tile* pTile = init_tile();
+    road *pRoad = init_road();
+    
     int32_t turn = 1;
     int32_t game_not_over = 1;
     while( 1 ) 
@@ -302,6 +406,7 @@ int main ()
                     int32_t c = print_option_menu( option , 6 );
                     int32_t choice = 0;
                     //this is a terrible design but bear with me :(
+                    //offers the choice
                     for( int32_t i = 0 ; i < 7 ; i++ )
                     {   
                         if( option[i] == 1 )
