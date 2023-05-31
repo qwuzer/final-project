@@ -3,6 +3,27 @@
 
 ###### tags: `final project` `C`
 
+TODO
+---
+- [ ] Settlement build limit //max: 5
+- [ ] Building index match with array:
+    - [ ] select : 1 - 54 , array[54] //0-53
+- [ ] resource limit (card pile)
+- [ ] buy dev card
+- [ ] use dev card
+- [ ] Robber
+    - [ ] steal from player
+    - [ ] resource limit 
+
+
+
+BEWARE
+---
+1. The index of resource in node is starts from 1
+2.
+
+
+
 basic implements
 ---
     19 terrain tiles
@@ -67,6 +88,17 @@ typedef struct _sTile
 }tile;
 
 ```
+
+##### development card
+Total : 25 cards
+Player is able to buy any amount of development card but development card never go back to supply and player will not be able to buy if the supply is end
+
+1. knight : 14 cards
+2. road building: Immediatley place 2 roads
+3. year of plenty: Immediatley take 2 cards from the supply stack
+4. monoply : Select one resource and take it from other players
+5. victory points : 5 cards
+
 
 ##### player 
 ``` C
