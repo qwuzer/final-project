@@ -8,8 +8,8 @@
 
 node *init_node();
 
-tile *init_tile();
+tile *init_tile( tile *ptile , node *pnode );
 
-road *init_road();
+road *init_road( road *proad , node *pnode );
 
 void normal_init( node *pn , tile *pt , road *pr);
