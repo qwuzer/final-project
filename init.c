@@ -414,11 +414,7 @@ tile *init_tile( node *pnode)
     {
         tile tmp;
         tmp.index=i+1;
-<<<<<<< HEAD
         tmp.resource_type = tile_type[i];
-=======
-        tmp.resource_type=tile_type[i];
->>>>>>> dd2fb743000a006205fa35bd7d1865927275460f
         tmp.robber= 0 + (i==18); //if i=18 means it's dessert, so put the robber
         if( i!=18 ) 
         {
