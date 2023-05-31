@@ -29,7 +29,7 @@ typedef struct _sNode
     /* 
              1          3 
             /            \
-      3 ㄧ *      or      * ㄧ 1
+      3 一 *      or      * 一 1
             \            /
              2          2
     */

@@ -52,6 +52,8 @@ typedef struct _sRoad
 
 node *init_node();
 
-tile *init_tile();
+tile *init_tile( node *pnode );
 
-road *init_road();
+road *init_road( node *pnode );
+
+void normal_init( node *pn , tile *pt , road *pr);
