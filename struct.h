@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+//14 knights , 5 victory points , 2 road building , 2 monopoly , 2 year of plenty
+enum card_type{ Card_Empty = -1 , Card_Knight = 0 , Card_Victory_Point , Card_Road_Building , Card_Monopoly , Card_Year_of_Plenty };
+int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+
 
 //1: Hills - bricks - 3
 //2: Fields - grain - 4
@@ -68,6 +72,9 @@ typedef struct _sPlayer
     int32_t longest_road;//0,1
     int32_t largest_army;//0,1
     /*TODO add dev card type*/
+    int32_t dev_card_num;
+    int32_t dev_card[5];//0-25
+    
 }Player;
 
 
