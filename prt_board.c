@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "color.h"
-#include "init.h"
+#include "struct.h"
 #include "prt_board.h"
 //type
 /*
@@ -69,12 +69,12 @@ void print_tile( tile tile ){
 		return;
 	}
 	//print_clr
-	if( tile.type == 1 ) printf( CLR_24_BG( 208, 102, 51 ) );//hill
-	else if( tile.type == 2 ) printf( CLR_24_BG( 105, 139, 34 ) );//fields
-	else if( tile.type == 3 ) printf( CLR_24_BG( 139, 139, 0 ) ) ;//pasture
-	else if( tile.type == 4 ) printf( CLR_24_BG( 34, 139, 34 ) );//forest
-	else if( tile.type == 5 ) printf( CLR_24_BG( 131, 139, 131 ) );//mountains
-	else if( tile.type == 6 ) printf( CLR_24_BG( 205, 149, 12 ) );//desert
+	if( tile.resource_type == 1 ) printf( CLR_24_BG( 208, 102, 51 ) );//hill
+	else if( tile.resource_type == 2 ) printf( CLR_24_BG( 105, 139, 34 ) );//fields
+	else if( tile.resource_type == 3 ) printf( CLR_24_BG( 139, 139, 0 ) ) ;//pasture
+	else if( tile.resource_type == 4 ) printf( CLR_24_BG( 34, 139, 34 ) );//forest
+	else if( tile.resource_type == 5 ) printf( CLR_24_BG( 131, 139, 131 ) );//mountains
+	else if( tile.resource_type == 6 ) printf( CLR_24_BG( 205, 149, 12 ) );//desert
 	return;
 }
 

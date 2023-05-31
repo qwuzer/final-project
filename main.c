@@ -3,8 +3,9 @@
 #include <stdlib.h>
 #include <time.h>
 #include "struct.h"
-#include "color.h"
 #include "init.h"
+#include "color.h"
+#include "prt_board.h"
 
 //generate random number
 int32_t roll_dice()
@@ -19,7 +20,7 @@ int32_t roll_dice()
 //check if any player has settlement on the number
 //if yes, give the player resources
 //check robber! -> reduce resources 
-void obtain_resources( int32_t sum , Player *player[] , tile *ptile )
+void obtain_resources( int32_t sum , Player *player , tile *ptile )
 {
     for( int32_t i = 0 ; i < 19 ; i++ )
     {
@@ -31,11 +32,11 @@ void obtain_resources( int32_t sum , Player *player[] , tile *ptile )
                 {
                     if( ptile[i].nodes[j]->type == 1 )//settlment 
                     {
-                        player[ptile[i].nodes[j]->owner]->resource[ptile[i].resource_type] += 1;
+                        player[ptile[i].nodes[j]->owner].resource[ptile[i].resource_type] += 1;
                     }
                     else if( ptile[i].nodes[j]->type == 2 )//city
                     {
-                        player[ptile[i].nodes[j]->owner]->resource[ptile[i].resource_type] += 2;
+                        player[ptile[i].nodes[j]->owner].resource[ptile[i].resource_type] += 2;
                     }
                     
                 }
@@ -199,7 +200,7 @@ int32_t is_able_to( Player *player , int32_t turn , node *pnode )
     int32_t count = 0;
     for( int32_t i = 0 ; i < 25 ; i++ ) 
     {
-        if( player->dev_card[i] == -1 ){
+        if( card[i] == -1 ) {
             count++;
         }
     }
@@ -265,25 +266,80 @@ void print_build( Player player )
 
 //check if any player has 1 wood, 1 brick, 1 sheep, 1 wheat
 //offer mutiple times in the same turn if condition is met
-void build_settlement_func( Player *player , road *road )
+void build_settlement_func( Player *player , road *proad , node *pnode)
 {
     /*Iterate thru node and flash the node that is available, provide the index*/
     int32_t build_index[54] = {0};
 
-    for( int32_t i = 0 ; i < 72 ; i++ )
+     for( int32_t i = 0 ; i < 72 ; i++ )
     {
-        if( road->owner == 0 ){
-            continue;
+        node *tmp1 = (proad + i)->node1;
+        node *tmp2 = (proad + i)->node2;
+
+        int32_t chk_3_dir = 1;//check if the 3 directioins has a building
+        if( tmp1->dir1 != NULL )
+        {
+            if( tmp1->dir1->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
         }
-        else{
-            node *tmp1 = road->node1;
-            node *tmp2 = road->node2;
-            if( tmp1->dir1->owner == 0 && tmp1->dir2->owner == 0 && tmp1->dir3->owner == 0 ){
-                build_index[tmp1->index] = 1;
+        if( tmp1->dir2 != NULL )
+        {
+            if( tmp1->dir2->owner != 0 )
+            {
+                chk_3_dir -= 1;
             }
-            if( tmp2->dir1->owner == 0 && tmp2->dir2->owner == 0 && tmp2->dir3->owner == 0 ){
-                build_index[tmp2->index] = 1;
+        }
+        if( tmp1->dir3 != NULL )
+        {
+            if( tmp1->dir3->owner != 0 )
+            {
+                chk_3_dir -= 1;
             }
+        }
+
+        if( chk_3_dir )
+        {
+            build_index[(tmp1->index)-1] = 1;
+        }
+
+        chk_3_dir = 1;//check if the 3 directioins has a building
+        if( tmp2->dir1 != NULL )
+        {
+            if( tmp2->dir1->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp2->dir2 != NULL )
+        {
+            if( tmp2->dir2->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp2->dir3 != NULL )
+        {
+            if( tmp2->dir3->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+
+        if( chk_3_dir )
+        {
+            build_index[(tmp2->index)-1] = 1;
+        }
+
+    }
+
+    //if the node is already occupied, set the index to 0
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        if( (pnode + i)->owner != 0 )
+        {
+            build_index[i] = 0;
         }
     }
 
@@ -291,10 +347,10 @@ void build_settlement_func( Player *player , road *road )
     /*TODO*/
     int32_t select = 0;
     scanf("%d",&select);
-    if( select > 54 || select < 1 )
+    if( select > 54 || select < 1 || build_index[select-1] == 0)
     {
         printf("Invalid input!\n");
-        build_settlement_func( player , road );
+        build_settlement_func( player , proad , pnode );
     }
 
     player->resource[Lumber] -= 1;
@@ -302,6 +358,14 @@ void build_settlement_func( Player *player , road *road )
     player->resource[Sheep] -= 1;
     player->resource[Grain] -= 1;
 
+
+    //record settlemnt build in player's attributes
+    player->building_index[select-1] = 1;
+    player->settlement_num += 1;
+
+    //Update node's attributes
+    (pnode + (select - 1))->owner = player->index;
+    (pnode + (select - 1))->type = 1;
     //option[build_settlement] = 0;
 }
 
@@ -331,7 +395,7 @@ void build_city_func( Player *player , node *pnode , road *proad )
     if( select > 54 || select < 1 )
     {
         printf("Invalid input!\n");
-        build_settlement_func( player , proad );
+        build_settlement_func( player , proad , pnode );
     }
 
     player->resource[Grain] -= 2;
@@ -394,7 +458,7 @@ void buy_dev_card_func( Player *player )
     //option[buy_dev_card] = 0; 
 }
 
-void moveRobber( tile *ptile)
+void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player is the one who moves the robber, player_start is for the reference of all players
 {
     printf("Select a tile to place the robber:\n");
     /*TODO*/
@@ -403,9 +467,46 @@ void moveRobber( tile *ptile)
     if( select > 19 || select < 1 || (ptile + (select - 1))->robber == 1 )
     {
         printf("Invalid input!\n");
-        moveRobber( ptile );
+        moveRobber( ptile , player1 , player_start );
     }
     (ptile + (select - 1))->robber = 1;
+
+    //player with more than 7 cards will lose half of the cards
+
+    //steal a resource from a player
+    int32_t steal_index[6] = {0};
+    for( int32_t i = 0 ; i < 6 ; i++ )
+    {
+        steal_index[i] = (ptile + (select - 1))->nodes[i]->owner ;
+    }
+
+    printf("Select a player to steal from:\n");
+    for( int32_t i = 0 , j = 1 ; i < 6 ; i++ )
+    {
+        if( steal_index[i] )
+        {
+            printf("%d. Player %d\n",j++,i+1);
+        }
+    }
+
+    select = 0;
+    scanf("%d",&select);
+    if( select > 6 || select < 1 || steal_index[select-1] == 0 )
+    {
+        printf("Invalid input!\n");
+        moveRobber( ptile , player1 , player_start );
+    }
+
+    //steal a random resource from the player
+    int32_t steal_resource = rand() % 5 + 1;
+    while( player_start[select-1].resource[steal_resource] == 0 )
+    {
+        steal_resource = rand() % 5 + 1;
+    }
+
+    player_start[select-1].resource[steal_resource] -= 1;
+    player1->resource[steal_resource] += 1;
+    
     return;
 }
 
@@ -476,7 +577,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
             //TODO
             //move the robber
             //steal a resource from a player
-            moveRobber( ptile );
+            //moveRobber( ptile , player , p1 );//not done!1!!
         }
         else if( player->dev_card[Card_Victory_Point] )
         {
@@ -507,27 +608,358 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
     }
 }
 
+void SetupBuildRoad( Player *player , road *proad )
+{
+    int32_t road_index[72] = {0};
+
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        road *road = proad + i;
+
+        if( road->owner == 0 ) {
+            if( road->dir1 != NULL )
+            {
+                if( road->dir1->owner == player->index )
+                {
+                    road_index[i] = 1;
+                }
+            }
+            if( road->dir2 != NULL )
+            {
+                if( road->dir2->owner == player->index )
+                {
+                    road_index[i] = 1;
+                }
+            }
+            if( road->dir3 != NULL )
+            {
+                if( road->dir3->owner == player->index )
+                {
+                    road_index[i] = 1;
+                }
+            }
+            if( road->dir4 != NULL )
+            {
+                if( road->dir4->owner == player->index )
+                {
+                    road_index[i] = 1;
+                }
+            }
+
+            if( road->node1->owner == player->index )
+            {
+                road_index[i] = 1;
+            }
+            if( road->node2->owner == player->index )
+            {
+                road_index[i] = 1;
+            }
+        }
+    }
+
+    //print the road that is available
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        printf("%d ",road_index[i]);
+    }
+    printf("\n");
+
+    printf("Select a place to build your road:\n");
+    /*TODO*/
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 72 || select < 1 || road_index[select-1] == 0 )
+    {
+        printf("Invalid input!\n");
+        devBuildRoad( player , proad );
+    }
+
+    //record road build in player's attributes
+    player->road_num += 1;
+
+    //Update node's attributes
+    (proad + (select-1))->owner = player->index;
+    
+
+    return;
+}
+
+int32_t SetupBuildSettlement( Player *player , road *proad , node *pnode )
+{
+    /*Iterate thru node and flash the node that is available, provide the index*/
+    int32_t build_index[54] = {0};
+
+    //printf("index =  %d",proad->index);
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        node *tmp1 = (proad + i)->node1;
+        node *tmp2 = (proad + i)->node2;
+
+        int32_t chk_3_dir = 1;//check if the 3 directioins has a building
+        if( tmp1->dir1 != NULL )
+        {
+            if( tmp1->dir1->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp1->dir2 != NULL )
+        {
+            if( tmp1->dir2->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp1->dir3 != NULL )
+        {
+            if( tmp1->dir3->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+
+        if( chk_3_dir )
+        {
+            build_index[(tmp1->index)-1] = 1;
+        }
+
+        chk_3_dir = 1;//check if the 3 directioins has a building
+        if( tmp2->dir1 != NULL )
+        {
+            if( tmp2->dir1->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp2->dir2 != NULL )
+        {
+            if( tmp2->dir2->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+        if( tmp2->dir3 != NULL )
+        {
+            if( tmp2->dir3->owner != 0 )
+            {
+                chk_3_dir -= 1;
+            }
+        }
+
+        if( chk_3_dir )
+        {
+            build_index[(tmp2->index)-1] = 1;
+        }
+
+    }
+
+    //if the node is already occupied, set the index to 0
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        if( (pnode + i)->owner != 0 )
+        {
+            build_index[i] = 0;
+        }
+    }
+
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        printf("%d ",build_index[i]);
+    }
+    printf("\n");
+
+    printf("Select a place to build your settlement:\n");
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 54 || select < 1 || build_index[select-1] == 0)
+    {
+        printf("Invalid input!\n");
+        SetupBuildSettlement( player , proad , pnode);
+    }
+    /*TODO*/
+
+    //record settlemnt build in player's attributes
+    player->building_index[select-1] = 1;
+    player->settlement_num += 1;
+
+    //Update node's attributes
+    (pnode + (select - 1))->owner = player->index;
+    (pnode + (select - 1))->type = 1;
+
+    return select;//0-54
+
+}
+
+//given the index of the settlement builded, allocate resources from tiles
+void SetupObtainResource( int32_t index , Player *player ,  node *pnode  )
+{
+    int32_t t1 = 0 , t2 = 0 , t3 = 0;
+    t1 = (pnode + (index - 1))->tile1;
+    t2 = (pnode + (index - 1))->tile2;
+    t3 = (pnode + (index - 1))->tile3;
+    if( t1 != 6 )//dessert
+    {
+        player->resource[(t1)] += 1;
+    }
+    if( t2 != 6 )
+    {
+        player->resource[(t2)] += 1;
+    }
+    if( t3 != 6 )
+    {
+        player->resource[(t3)] += 1;
+    }
+}
+
 int main ()
 {
     Player *player[4];
     for(int32_t i = 0 ; i < 4 ; i++ )
     {
         player[i] = (Player*)malloc(sizeof(Player));
+        player[i]->index = i+1;
     }
 
-    node *pNode = init_node();
-    tile *pTile = init_tile();
-    road *pRoad = init_road();
+    node *pNode = calloc(54,sizeof(node));
+    pNode = init_node(pNode);
+ 
+    road *pRoad = calloc( 72 , sizeof(road) );
+    pRoad = init_road(pRoad , pNode);
+
+    tile *pTile = calloc(19,sizeof(tile));
+    pTile = init_tile(pTile , pNode);
+
+    int32_t settlement_index = 0;
+
+/*-------------------------Setup Phase--------------------------------*/
+    SetupBuildSettlement( player[0] , pRoad , pNode );
+    SetupBuildRoad( player[0] , pRoad );
+
+    // SetupBuildSettlement( player[1] , pRoad , pNode );
+    // SetupBuildRoad( player[1] , pRoad );
+
+    // SetupBuildSettlement( player[2] , pRoad , pNode );
+    // SetupBuildRoad( player[2] , pRoad );
+
+    // SetupBuildSettlement( player[3] , pRoad , pNode );
+    // SetupBuildRoad( player[3] , pRoad );
+
+    // settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
+    // SetupObtainResource( settlement_index , player[3] , pNode );
+    // SetupBuildRoad( player[3] , pRoad );
+
+    // settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
+    // SetupObtainResource( settlement_index , player[2] , pNode );
+    // SetupBuildRoad( player[2] , pRoad );
+
+    // settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
+    // SetupObtainResource( settlement_index , player[1] , pNode );
+    // SetupBuildRoad( player[1] , pRoad );
+
+    settlement_index = SetupBuildSettlement( player[0] , pRoad , pNode );
+    SetupObtainResource( settlement_index , player[0] , pNode );
+    SetupBuildRoad( player[0] , pRoad );
+
+/*--------------------------------------------*/
+
+
+    print_board( pTile, pNode, pRoad );
+    printf( "Player 1's turn\n" );
+    //int32_t choice;
+    int32_t turn = 1;//how many times the player has used the dev card this round
+
+    /*roll dice*/
+    //int32_t sum = roll_dice();
+    int32_t sum = 7;
+
+
+    printf("sum = %d\n",sum);
+    //allocate resources
+    if( sum != 7 )
+    {
+        obtain_resources( sum , player[0] , pTile );
+    }
+    else
+    {
+        //move robber
+        moveRobber( pTile , player[0] , player[0] );
+        //steal a resource from a player
+    }
+
+    //print the resources of player1
+    for( int32_t i = 0 ; i < 5 ; i++ )
+    {
+        printf("%d ",player[0]->resource[i]);
+    }
+    printf("\n");
+
+    while( is_able_to( player[1] , turn , pNode ) )
+    {
+        int32_t c = print_option_menu( option , 6 );
+        int32_t choice = 0;
+        //this is a terrible design but bear with me :(
+        //offers the choice
+        for( int32_t i = 0 ; i < 7 ; i++ )
+        {   
+            if( option[i] == 1 )
+            {
+                choice++;
+            }
+            if( choice == c )
+            {
+                choice = i;
+                break;
+            }
+        }
+        switch( choice )
+        {
+            case 1: 
+                buy_dev_card_func( player[0] );
+                break;
+            case 2:
+                use_dev_card_func( player[0] , player[1] , player[2] , player[3] , pRoad , pTile );
+                turn++;//update turn
+                break;
+            case 3:
+                //trade_with_player( player[0] );
+                break;
+            case 4:
+                //marine_trade( player[0]);
+                break;
+            case 5:
+                build_settlement_func( player[0] , pRoad , pNode );
+                break;
+            case 6:
+                build_road_func( player[0]  , pRoad );
+                break;
+            case 7:
+                build_city_func( player[0] , pNode , pRoad );
+                break;
+            default:
+                break;
+        }
+        is_game_over( player );//check if any player has 10 points
+    }
+
     
-    int32_t turn = 1;
-    int32_t game_not_over = 1;
+    free(pNode);
+    free(pTile);
+    free(pRoad);
+
+    //free player
+    for( int32_t i = 0 ; i < 4 ; i++ )
+    {
+        free(player[i]);
+    }
+
+    /*
     while( 1 ) 
     {
         switch( turn )
         {
             case 1:
                 printf( "Player 1's turn\n" );
-                int32_t choice;
+                //int32_t choice;
                 int32_t turn = 1;//player 1's turn
                 while( is_able_to( player[1] , turn , pNode ) )
                 {
@@ -597,5 +1029,8 @@ int main ()
     {
         free(player[i]);
     }
+    
+    */
+
     return 0;
 }

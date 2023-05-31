@@ -6,7 +6,7 @@
 
 //14 knights , 5 victory points , 2 road building , 2 monopoly , 2 year of plenty
 enum card_type{ Card_Empty = -1 , Card_Knight = 0 , Card_Victory_Point , Card_Road_Building , Card_Monopoly , Card_Year_of_Plenty };
-int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+int32_t card[25];// = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
 
 
 //1: Hills - bricks - 3
@@ -17,11 +17,11 @@ int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 ,
 //6: Desert - no resource - 1
 enum TileType{ Tile_Hills = 1 , Tile_Fields  , Tile_Pasture, Tile_Forest, Tile_Mountains, Tile_Desert };
 
-int32_t tile_type[19];//1-6
+extern int32_t tile_type[19];//1-6
 //{ 5 , 2 , 2 , 4 , 1 , 2 , 3 , 3 , 5 , 1 , 4 , 2 , 1 , 4 , 5 , 2 , 4 , 3 , 6 };
 //starting from upper-left corner and go counter-clockwise
 
-int32_t tile_dice_num[18] = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 , 9 , 4 , 5 , 6 , 3 , 11 };//2-12
+extern int32_t tile_dice_num[18];//; = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 , 9 , 4 , 5 , 6 , 3 , 11 };//2-12
 //{A-5} {B-2} {C-6} {D-3} {E-8} {F-10} {G-9} {H-12} {I-11} {J-4} {K-8} {L-10} {M-9} {N-4} {O-5} {P-6} {Q-3} {R-11} 
 
 typedef struct _sNode
@@ -56,13 +56,13 @@ typedef struct _sTile
 }tile;
 
 
-enum Resource{ Brick = 0 , Grain , Sheep , Lumber , Ore };
+enum Resource{ Brick = 1 , Grain , Sheep , Lumber , Ore };
 
 typedef struct _sPlayer
 {
     int32_t index;//0-3
     int32_t color;//0-3
-    int32_t resource[5];//0-4
+    int32_t resource[6];//1-5
     int32_t victory_point;//0-10
     int32_t road_num;//0-15
     int32_t settlement_num;//0-5  
