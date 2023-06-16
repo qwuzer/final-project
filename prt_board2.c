@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "color.h"
-#include "init.h"
+#include "struct.h"
 #include "prt_board.h"
 
 //#include "struct.h"
