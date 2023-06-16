@@ -854,6 +854,7 @@ void buy_dev_card_func( Player *player )
 
 void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player is the one who moves the robber, player_start is for the reference of all players
 {
+    moverobber:
     printf("Select a tile to place the robber:\n");
     /*TODO*/
     int32_t select = 0;
@@ -861,7 +862,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
     if( select > 19 || select < 1 || (ptile + (select - 1))->robber == 1 )
     {
         printf("Invalid input!\n");
-        moveRobber( ptile , player1 , player_start );
+        //moveRobber( ptile , player1 , player_start );
+        goto moverobber;
     }
     (ptile + (select - 1))->robber = 1;
 
