@@ -7,6 +7,8 @@
 #include "color.h"
 #include "prt_board.h"
 
+//char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+
 //generate random number
 int32_t roll_dice()
 {
@@ -928,7 +930,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
             }
 
             //show the resource stolen
-            printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string[select-1],select);
+            // char* resource_string2[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+            // printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string2[select-1],select);
 
             player_start[select-1].resource[steal_resource] -= 1;
             player1->resource[steal_resource] += 1;
@@ -1002,6 +1005,7 @@ void devBuildRoad( Player *player , road *proad )//not done!
 
 void Monopoly( Player *monopoler , Player *p1, Player *p2 , Player *p3 )
 {
+    
     printf("Select a resource to monopolize:\n");
     printf("1. Brick\n");
     printf("2. Grain\n");
@@ -1019,9 +1023,10 @@ void Monopoly( Player *monopoler , Player *p1, Player *p2 , Player *p3 )
     select -= 1;
 
     //show how many resources the player has monopolized from other players
-    printf("You have monopolized %d %s from player 1\n",p1->resource[select],resource_string[select]);
-    printf("You have monopolized %d %s from player 2\n",p2->resource[select],resource_string[select]);
-    printf("You have monopolized %d %s from player 3\n",p3->resource[select],resource_string[select]);
+    //  monopolichar* resource_string1[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+    // printf("You have monopolized %d %s from player 1\n",p1->resource[select],resource_string1[select]);
+    // printf("You have monopolized %d %s from player 2\n",p2->resource[select],resource_string1[select]);
+    // printf("You havezed %d %s from player 3\n",p3->resource[select],resource_string1[select]);
 
     int32_t total = p1->resource[select] + p2->resource[select] + p3->resource[select];
     monopoler->resource[select] += total;
