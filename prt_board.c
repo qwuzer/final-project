@@ -459,6 +459,9 @@ void print_board( tile * pTile, node * pNode, road * pRoad ) {
     printf("                    ?\n");
 	////the code above is for line 23-------------------------
 }
+
+
+
 /*
 int main() {
 	//tile tile[19] = {0};node node[54] = {0};road road[76] = {0};
