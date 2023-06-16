@@ -63,8 +63,8 @@ int32_t is_game_over( Player *players[] )
 
 /* AFTER ANY OPTION IS PERFORMED, OPTION MUST BE UPDATED*/
 /*The reason of this option array is to provide a cleaner user's menu every turn*/
-enum options {  buy_dev_card = 0 , use_dev_card = 1 , trade_with_player , marine_trade , build_settlement , build_road , build_city };
-int32_t option[7] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 };
+enum options {  buy_dev_card = 0 , use_dev_card = 1 , trade_with_player , marine_trade , build_settlement , build_road , build_city , end_turn };
+int32_t option[8] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1};
 
 int32_t print_option_menu( int32_t option[] , size_t size )
 {
@@ -99,6 +99,9 @@ int32_t print_option_menu( int32_t option[] , size_t size )
                     break;
                 case 6:
                     printf("Build city\n");
+                    break;
+                case 7:
+                    printf("End turn\n");
                     break;
                 default:
                     break;
@@ -164,17 +167,19 @@ void marine_trade_func( Player *player , int32_t *tmp_marine_option  )
                     break;
             }
         }
-        if( i == 0 && on_any_port == 0 )
+        if( i == 0 )// && on_any_port == 0 
         {
             printf("7.)You can trade 4 resources with one resource!\n");
-            return;
+            break;
+            //return;
         }
     }
+
     
     int32_t select_opt = 0;
     printf("Select a option.\n");
     scanf("%d",&select_opt);
-    if( select_opt > 7 || select_opt < 1 )
+    if( (select_opt > 7 || select_opt < 1) && tmp_marine_option[select_opt] != 0 )
     {
         printf("Invalid input!\n");
         goto marine_trade;
@@ -560,6 +565,7 @@ int32_t is_able_to( Player *player , int32_t devUsage , road *proad , node *pnod
     int32_t *marine_option = malloc( sizeof(int32_t) * 7 );
 
     marine_trade_chk( player , pnode , ports , &marine_option );
+    //check if any trade is possible
     for( int32_t i = 0 ; i < 7 ; i++ )
     {
         if( marine_option[i] != 0 )
@@ -568,6 +574,7 @@ int32_t is_able_to( Player *player , int32_t devUsage , road *proad , node *pnod
             ret = 1;
         }
     }
+
     //int32_t *tmp_marine_option = malloc( sizeof(int32_t) * 7 );
     for( int32_t i = 0 ; i < 7 ; i++ )
     {
@@ -832,6 +839,14 @@ void build_road_func( Player *player , road *proad )
     return;
 }
 
+void print_dev_card( int32_t i )
+{
+    //enum card_type{ Card_Empty = -1 , Card_Knight = 0 , Card_Victory_Point , Card_Road_Building , Card_Monopoly , Card_Year_of_Plenty };
+    char *card_name[5] = {"Knight","Victory Point","Road Building","Monopoly","Year of Plenty"};
+    printf("You have obtained a %s card\n",card_name[i]);
+    return;
+}
+
 //check if dev is obtained in the same turn
 void buy_dev_card_func( Player *player )
 {
@@ -843,6 +858,8 @@ void buy_dev_card_func( Player *player )
     {
         if( card[i] != -1 )
         {
+            //printf("You have obtained a %s card!\n",card_name[card[i]])
+            print_dev_card( card[i] );
             player->dev_card[card[i]] += 1; 
             player->dev_card_num += 1;
             card[i] = -1;
@@ -930,8 +947,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
             }
 
             //show the resource stolen
-            // char* resource_string2[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
-            // printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string2[select-1],select);
+            char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+            printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string[select-1],select);
 
             player_start[select-1].resource[steal_resource] -= 1;
             player1->resource[steal_resource] += 1;
@@ -1023,10 +1040,10 @@ void Monopoly( Player *monopoler , Player *p1, Player *p2 , Player *p3 )
     select -= 1;
 
     //show how many resources the player has monopolized from other players
-    //  monopolichar* resource_string1[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
-    // printf("You have monopolized %d %s from player 1\n",p1->resource[select],resource_string1[select]);
-    // printf("You have monopolized %d %s from player 2\n",p2->resource[select],resource_string1[select]);
-    // printf("You havezed %d %s from player 3\n",p3->resource[select],resource_string1[select]);
+    char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+    printf("You have monopolized %d %s from player 1\n",p1->resource[select],resource_string[select]);
+    printf("You have monopolized %d %s from player 2\n",p2->resource[select],resource_string[select]);
+    printf("You havezed %d %s from player 3\n",p3->resource[select],resource_string[select]);
 
     int32_t total = p1->resource[select] + p2->resource[select] + p3->resource[select];
     monopoler->resource[select] += total;
@@ -1452,14 +1469,15 @@ int main ()
 
 int32_t turn = 1;//player 1's turn
                 int32_t *tmp_marine_option = malloc( sizeof( int32_t ) * 7 );
-                while( is_able_to( player[0] , turn , pRoad , pNode, &tmp_marine_option ) )
+                int32_t quit = 1;
+                while( is_able_to( player[0] , turn , pRoad , pNode, &tmp_marine_option ) && quit )
                 {
-                    int32_t c = print_option_menu( option , 6 );
+                    int32_t c = print_option_menu( option , 8 );
                     int32_t choice = 0;
                     
                     //this is a terrible design but bear with me :(
                     //offers the choice
-                    for( int32_t i = 0 ; i < 7 ; i++ )
+                    for( int32_t i = 0 ; i < 8 ; i++ )
                     {   
                         if( option[i] == 1 )
                         {
@@ -1498,6 +1516,9 @@ int32_t turn = 1;//player 1's turn
                         case 7:
                             build_city_func( player[0] , pNode , pRoad );
                             print_board( pTile, pNode, pRoad );
+                            break;
+                        case 8:
+                            quit = 0;
                             break;
                         default:
                             break;
