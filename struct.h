@@ -58,7 +58,7 @@ typedef struct _sTile
 
 enum Resource{ Brick = 1 , Grain , Sheep , Lumber , Ore };
 //enum string
-char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
+
 
 typedef struct _sPlayer
 {
