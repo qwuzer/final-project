@@ -40,7 +40,7 @@ typedef struct _sNode
     int32_t tile2;
     int32_t tile3;
 }node;*/
-enum Resource{ Brick = 1 , Grain , Sheep , Lumber , Ore };
+/*enum Resource{ Brick = 1 , Grain , Sheep , Lumber , Ore };
 
 typedef struct _sPlayer
 {
@@ -54,12 +54,12 @@ typedef struct _sPlayer
     int32_t city_num;//0-4
     int32_t knight_num;//0-5
     int32_t longest_road;//0,1
-    int32_t largest_army;//0,1
+    int32_t largest_army;//0,1*/
     /*TODO add dev card type*/
-    int32_t dev_card_num;
+   /* int32_t dev_card_num;
     int32_t dev_card[5];//0-25
 
-}Player;
+}Player;*/
 void check_owner( int32_t owner );
 void print_tile( tile tile);
 void print_node( node node);
