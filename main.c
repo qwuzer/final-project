@@ -671,7 +671,7 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
             }
         }
 
-        if( chk_3_dir )
+        if( chk_3_dir > 0 )
         {
             build_index[(tmp1->index)-1] = 1;
         }
@@ -699,7 +699,7 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
             }
         }
 
-        if( chk_3_dir )
+        if( chk_3_dir > 0)
         {
             build_index[(tmp2->index)-1] = 1;
         }
@@ -714,6 +714,15 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
             build_index[i] = 0;
         }
     }
+
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        if( build_index[i] != 0 )
+        {
+            printf("%d ",i+1);
+        }
+    }
+    printf("\n");
 
     printf("Select a place to build your settlement:\n");
     /*TODO*/
@@ -828,6 +837,15 @@ void build_road_func( Player *player , road *proad )
             {
                 road_index[i] = 1;
             }
+        }
+    }
+
+
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        if( road_index[i] != 0 )
+        {
+            printf("%d ",i+1);
         }
     }
 
@@ -1251,9 +1269,11 @@ void SetupBuildRoad( Player *player , road *proad )
     //print the road that is available
     for( int32_t i = 0 ; i < 72 ; i++ )
     {
-        printf("%d ",road_index[i]);
+        if( road_index[i] != 0 )
+        {
+            printf("%d ",i+1);
+        }
     }
-    printf("\n");
 
     build : printf("Select a place to build your road:\n");
     /*TODO*/
@@ -1310,7 +1330,7 @@ int32_t SetupBuildSettlement( Player *player , road *proad , node *pnode )
             }
         }
 
-        if( chk_3_dir )
+        if( chk_3_dir > 0 )
         {
             build_index[(tmp1->index)-1] = 1;
         }
@@ -1338,12 +1358,13 @@ int32_t SetupBuildSettlement( Player *player , road *proad , node *pnode )
             }
         }
 
-        if( chk_3_dir )
+        if( chk_3_dir > 0 )
         {
             build_index[(tmp2->index)-1] = 1;
         }
 
     }
+
 
     //if the node is already occupied, set the index to 0
     for( int32_t i = 0 ; i < 54 ; i++ )
@@ -1354,11 +1375,16 @@ int32_t SetupBuildSettlement( Player *player , road *proad , node *pnode )
         }
     }
 
-    // for( int32_t i = 0 ; i < 54 ; i++ )
-    // {
-    //     printf("%d ",build_index[i]);
-    // }
-    // printf("\n");
+
+    for( int32_t i = 0 ; i < 54 ; i++ )
+    {
+        if( build_index[i] != 0 )
+        {
+            printf("%d ",i+1);
+        }
+    }
+    printf("\n");
+
 
     build_set : printf("Select a place to build your settlement:\n");
     int32_t select = 0;
@@ -1434,13 +1460,14 @@ int main ()
     tile *pTile = calloc(19,sizeof(tile));
     pTile = init_tile(pTile , pNode);
 
-    print_board( pTile, pNode, pRoad , player[0] );
+    
 
     player[0]->resource[Brick] = 5;
     player[0]->resource[Grain] = 5;
     player[0]->resource[Sheep] = 5;
     player[0]->resource[Lumber] = 5;
     player[0]->resource[Ore] = 5;
+    print_board( pTile, pNode, pRoad , player[0] );
 
     int32_t settlement_index = 0;
 
@@ -1450,44 +1477,45 @@ int main ()
     SetupBuildRoad( player[0] , pRoad );
     print_board( pTile, pNode, pRoad , player[0]);
 
-    // SetupBuildSettlement( player[1] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupBuildRoad( player[1] , pRoad );
-    // print_board( pTile, pNode, pRoad );
+    SetupBuildSettlement( player[1] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[1] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // SetupBuildSettlement( player[2] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupBuildRoad( player[2] , pRoad );
-    // print_board( pTile, pNode, pRoad );
+    SetupBuildSettlement( player[2] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[2] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // SetupBuildSettlement( player[3] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupBuildRoad( player[3] , pRoad );
-    // print_board( pTile, pNode, pRoad );
 
-    // settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupObtainResource( settlement_index , player[3] , pNode );
-    // SetupBuildRoad( player[3] , pRoad );
-    // print_board( pTile, pNode, pRoad );
+    SetupBuildSettlement( player[3] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[3] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupObtainResource( settlement_index , player[2] , pNode );
-    // SetupBuildRoad( player[2] , pRoad );
-    // print_board( pTile, pNode, pRoad );
+    settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[3] , pNode );
+    SetupBuildRoad( player[3] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad );
-    // SetupObtainResource( settlement_index , player[1] , pNode );
-    // SetupBuildRoad( player[1] , pRoad );
-    // print_board( pTile, pNode, pRoad );
+    settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[2] , pNode );
+    SetupBuildRoad( player[2] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
+
+    settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[1] , pNode );
+    SetupBuildRoad( player[1] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
     settlement_index = SetupBuildSettlement( player[0] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad, player[0]);
+    print_board( pTile, pNode, pRoad , player[0]);
     SetupObtainResource( settlement_index , player[0] , pNode );
     SetupBuildRoad( player[0] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+     print_board( pTile, pNode, pRoad , player[0]);
 
 /*-------------------------Setup Phase--------------------------------*/
 
