@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include "color.h"
 #include "struct.h"
-#include "prt_board.h"
+#include "prt_board2.h"
 
 //#include "struct.h"
 //type
@@ -310,7 +310,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	check_owner( pRoad[42].owner );
 	printf("/"CLR_RST);
 	printf(" \\ ");
-	printf("     ");printf("| 	Brick:       %d   |\n", pPlayer->resource[0] );
+	printf("     ");printf("| 	Brick:       %d   |\n", pPlayer->resource[1] );
 	////the code above is for line 12-------------------------
     printf("  ?---");
 	print_node( pNode[30] );//printf("*");
@@ -330,7 +330,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[35] );//printf("*");
 	printf("---G");
-	printf("     ");printf("|   Grain:       %d   |\n", pPlayer->resource[1] );
+	printf("     ");printf("|   Grain:       %d   |\n", pPlayer->resource[2] );
 	////the code above is for line 13-------------------------
     printf("     ");
 	check_owner( pRoad[46].owner );
@@ -355,7 +355,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[51].owner );
 	printf("\\"CLR_RST" ");
-	printf("       ");printf("|   Sheep:       %d   |\n", pPlayer->resource[2] );
+	printf("       ");printf("|   Sheep:       %d   |\n", pPlayer->resource[3] );
 	////the code above is for line 14-------------------------
     printf("    ");
 	print_node( pNode[36] );//printf("*");
@@ -375,7 +375,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("% 4d   "CLR_RST, 9);
 	print_node( pNode[41] );//printf("*");
 	//printf("\n");
-	printf("       ");printf("|   Lumber:      %d   |\n", pPlayer->resource[3] );
+	printf("       ");printf("|   Lumber:      %d   |\n", pPlayer->resource[4] );
 	////the code above is for line 15-------------------------
     printf("     ");
 	check_owner( pRoad[54].owner );	
@@ -400,7 +400,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[59].owner );
 	printf("/"CLR_RST);
-	printf("        ");printf("|   Ore:         %d   |\n", pPlayer->resource[4] );
+	printf("        ");printf("|   Ore:         %d   |\n", pPlayer->resource[5] );
 	////the code above is for line 16-------------------------
     printf("      ");
 	print_node( pNode[42] );//printf("*");
