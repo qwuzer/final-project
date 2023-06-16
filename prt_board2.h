@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
-#include "init.h"
-//#include "struct.h"
+//#include "init.h"
+#include "struct.h"
 //type
 /*
 typedef struct _sTile
