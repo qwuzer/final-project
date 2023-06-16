@@ -477,21 +477,3 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	////the code above is for line 23-------------------------
 }
 
-int main() {
-	//tile tile[19] = {0};node node[54] = {0};road road[76] = {0};
-	Player *player[4];
-    for(int32_t i = 0 ; i < 4 ; i++ )
-    {
-        player[i] = (Player*)calloc(sizeof(Player),1);
-        player[i]->index = i+1;
-    }
-	tile* pTile = init_tile();
-	road* pRoad = init_road();
-	node* pNode = init_node();
-    print_board( pTile, pNode, pRoad, player[0] );
-	free( pTile );
-	free( pRoad );
-	free( pNode );
-    return 0;
-}
-
