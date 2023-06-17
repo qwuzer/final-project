@@ -27,7 +27,7 @@ int32_t ai_find_empty_road( Arg arg );
 int32_t ai_find_empty_node( Arg arg );
 int32_t ai_find_village( Arg arg );
 void ai_move_robber( int32_t where , Arg arg );
-void ai_get_resourse( int32_t dice , Arg arg );
+void ai_get_resource( int32_t dice_number , Arg arg );
 
 // for advance
 //public function
