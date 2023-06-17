@@ -30,7 +30,7 @@ int32_t roll_the_dice()
 
 // for basic
 //public function
-void ai_turn( Player *p , tile *t , node *n , road *r ); 
+void ai_turn( Player *p , tile *t , node *n , road *r , int32_t index_num ); 
 //private function
 void ai_set_road( int32_t where , Arg arg );
 void ai_set_village( int32_t where , Arg arg );
