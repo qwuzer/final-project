@@ -1115,17 +1115,32 @@ void devBuildRoad( Player *player , road *proad )//not done!
             }
         }
     }
+      //print the road that is available
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        if( road_index[i] != 0 )
+        {
+            printf("%d ",i+1);
+        }
+    }
 
     dev_build : printf("Select a place to build your road:\n");
     /*TODO*/
     int32_t select = 0;
     scanf("%d",&select);
-    if( select > 54 || select < 1 )
+    if( select > 72 || select < 1 || road_index[select-1] == 0 )
     {
         printf("Invalid input!\n");
-        goto dev_build;
-        //devBuildRoad( player , road );
+        goto dev_build ;
     }
+
+    //record road build in player's attributes
+    player->road_num += 1;
+
+    //Update node's attributes
+    (proad + (select-1))->owner = player->index;
+    
+
 
     return;
 }
@@ -1207,7 +1222,7 @@ void Year_of_Plenty( Player *player  )
 }
 
 
-void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , road *proad , tile *ptile , Player *player_start )
+void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , road *proad , node* pnode, tile *ptile , Player *player_start )
 {
     show_dev:
     for( int32_t i = 0 ; i < 5 ; i++ )
@@ -1296,6 +1311,8 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
                 }
                 //TODO
                 //build 2 roads
+                devBuildRoad( player , proad );
+                print_board( ptile , pnode , proad, player_start);
                 devBuildRoad( player , proad );
             }
             break;
@@ -1851,7 +1868,7 @@ int main ()
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[0] , player[1] , player[2] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[0] , player[1] , player[2] , player[3] , pRoad , pNode, pTile , player[0] );
                             print_board( pTile, pNode, pRoad, player[0]);
                             devUsage++;//update turn
                             break;
@@ -1923,7 +1940,7 @@ int main ()
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad ,pNode, pTile , player[0] );
                             print_board( pTile, pNode, pRoad , player[0]);
                             devUsage++;//update turn
                             break;
@@ -1991,7 +2008,7 @@ int main ()
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pNode ,pTile , player[0] );
                             print_board( pTile, pNode, pRoad, player[0]);
                             devUsage++;//update turn
                             break;
@@ -2060,7 +2077,7 @@ int main ()
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pNode , pTile , player[0] );
                             print_board( pTile, pNode, pRoad ,player[0]);
                             devUsage++;//update turn
                             break;
