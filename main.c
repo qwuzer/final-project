@@ -1182,7 +1182,7 @@ void Year_of_Plenty( Player *player  )
         printf("Invalid input!\n");
         Year_of_Plenty( player );
     }
-    select1 -= 1;
+   // select1 -= 1;
 
     printf("Select another resource to take:\n");
     printf("1. Brick\n");
@@ -1198,7 +1198,7 @@ void Year_of_Plenty( Player *player  )
         printf("Invalid input!\n");
         Year_of_Plenty( player );
     }
-    select2 -= 1;
+   // select2 -= 1;
 
     player->resource[select1] += 1;
     player->resource[select2] += 1;
@@ -1249,6 +1249,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
         case 0:
             if( player->dev_card_type_num[Card_Knight] )
             {
+                player->dev_card_num--;
                 player->dev_card_type_num[Card_Knight]--;
                 for( int32_t i = 0 ; i < 25 ; i++ )
                 {
@@ -1267,6 +1268,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
         case 1:
             if( player->dev_card_type_num[Card_Victory_Point] )
             {
+                player->dev_card_num--;
                 player->dev_card_type_num[Card_Victory_Point]--;
                 for( int32_t i = 0 ; i < 25 ; i++ )
                 {
@@ -1282,6 +1284,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
         case 2:
             if( player->dev_card_type_num[Card_Road_Building] )
             {
+                player->dev_card_num--;
                 player->dev_card_type_num[Card_Road_Building]--;
                 for( int32_t i = 0 ; i < 25 ; i++ )
                 {
@@ -1299,6 +1302,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
         case 3:
             if( player->dev_card_type_num[Card_Monopoly] )
             {
+                player->dev_card_num--;
                 player->dev_card_type_num[Card_Monopoly]--;
                 for( int32_t i = 0 ; i < 25 ; i++ )
                 {
@@ -1316,6 +1320,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
         case 4:
             if( player->dev_card_type_num[Card_Year_of_Plenty] )
             {
+                player->dev_card_num--;
                 player->dev_card_type_num[Card_Year_of_Plenty]--;
                 for( int32_t i = 0 ; i < 25 ; i++ )
                 {
