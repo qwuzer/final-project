@@ -6,7 +6,12 @@
 
 //14 knights , 5 victory points , 2 road building , 2 monopoly , 2 year of plenty
 enum card_type{ Card_Empty = -1 , Card_Knight = 0 , Card_Victory_Point , Card_Road_Building , Card_Monopoly , Card_Year_of_Plenty };
-int32_t card[25];// = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+//int32_t card[25];// = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+typedef struct _Scard
+{
+    int32_t type;//0 - 4
+    int32_t timestamp;//to check if its obtained in the same round, if yes then it cannot be used 
+}card;
 
 
 //1: Hills - bricks - 3
@@ -75,8 +80,8 @@ typedef struct _sPlayer
     int32_t largest_army;//0,1
     /*TODO add dev card type*/
     int32_t dev_card_num;
-    int32_t dev_card[5];//0-25
-   
+    int32_t dev_card_type_num[5];//0:knight 14 1:card , used in use_dev_card_func
+    card dev_card[25];
 }Player;
 
 

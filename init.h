@@ -8,6 +8,8 @@
 
 node *init_node();
 
+card *init_card( card *pcard );
+
 tile *init_tile( tile *ptile , node *pnode );
 
 road *init_road( road *proad , node *pnode );

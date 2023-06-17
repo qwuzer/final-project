@@ -5,11 +5,31 @@
 #include "struct.h"
 #include "init.h"
 
-int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+//int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
 
 int32_t tile_dice_num[18] = { 5 , 2 , 6 , 3 , 8 , 10 , 9 , 12 , 11 , 4 , 8 , 10 , 9 , 4 , 5 , 6 , 3 , 11 };//2-12
 
 int32_t tile_type[19] = { 5 , 2 , 2 , 4 , 1 , 2 , 3 , 3 , 5 , 1 , 4 , 2 , 1 , 4 , 5 , 2 , 4 , 3 , 6 };
+
+
+card *init_card( card *pcard )
+{
+    int32_t tmp[25] = { 2 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
+    //shuffle tmp
+    // for( int32_t i = 0 ; i < 25 ; i++ ){
+    //     int32_t j = rand() % 25;
+    //     int32_t tmp2 = tmp[i];
+    //     tmp[i] = tmp[j];
+    //     tmp[j] = tmp2;
+    // }
+    //init card
+    for( int32_t i = 0 ; i < 25 ; i++ ){
+        pcard[i].type = tmp[i];
+        pcard[i].timestamp = 0;
+    }
+    return pcard;
+}
+
 
 node *init_node( node *pnode )
 {

@@ -7,8 +7,6 @@
 #include "color.h"
 #include "prt_board2.h"
 
-//
-
 //generate random number
 int32_t roll_dice()
 {
@@ -56,6 +54,7 @@ int32_t is_game_over( Player *players[] )
     int32_t i = 0;
     for( i = 0 ; i < 4 ; i++ )
     {
+        printf("Player %d has %d points\n",players[i]->index,players[i]->victory_point);
         if( players[i]->victory_point >= 10 )
         {
             return 1;
@@ -533,7 +532,7 @@ int32_t chk_road_func( Player *player , road *proad )
 }
 
 //play one development card each turn
-int32_t is_able_to( Player *player , int32_t devUsage , road *proad , node *pnode , int32_t **tmp_marine_option , int32_t* option )
+int32_t is_able_to( Player *player , int32_t devUsage , card *pcard , road *proad , node *pnode , int32_t **tmp_marine_option , int32_t* option )
 {
     int32_t ret = 0;
 
@@ -556,7 +555,7 @@ int32_t is_able_to( Player *player , int32_t devUsage , road *proad , node *pnod
     int32_t count = 0;
     for( int32_t i = 0 ; i < 25 ; i++ ) 
     {
-        if( card[i] == -1 ) {
+        if( pcard[i].type == -1 ) {
             count++;
         }
     }
@@ -569,14 +568,22 @@ int32_t is_able_to( Player *player , int32_t devUsage , road *proad , node *pnod
             ret++;
         }
     }
+    
 
     /*check if the dev card is usable in this round*/
-    /*TODO*/
-    if( player->dev_card_num >= 1 && devUsage == 1 )
+    /*If the card the player holds has a timestamp that is not aquired this round, then we can use */
+    if( player->dev_card_num >= 1 )
     {
-        option[use_dev_card] = 1;
-        //ret = 1;
-        ret++;
+        printf("dev_card_num = %d\n",player->dev_card_num);
+        for(int32_t i = 0 ; i < 25 ; i++ )
+        {
+            
+            if( pcard[i].timestamp != devUsage && pcard[i].type != -1)
+            {
+                option[use_dev_card] = 1;
+                ret++;
+            }
+        }
     }
 
     if( player->resource[Lumber] >= 1 && player->resource[Brick] >= 1 && player->resource[Sheep] >= 1 && player->resource[Grain] >= 1 )
@@ -781,6 +788,9 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
     player->building_index[select-1] = 1;
     player->settlement_num += 1;
 
+    //gain 1 victory point
+    player->victory_point += 1;
+
     //Update node's attributes
     (pnode + (select - 1))->owner = player->index;
     (pnode + (select - 1))->type = 1;
@@ -819,6 +829,9 @@ void build_city_func( Player *player , node *pnode , road *proad )
     player->building_index[select-1] = 2;
     pnode[select-1].type = 2;
     pnode[select-1].owner = player->index;
+
+    //gain 2 victory point
+    player->victory_point += 2;
 
     //player->settlement_num -= 1; ??
 
@@ -915,21 +928,47 @@ void print_dev_card( int32_t i )
 }
 
 //check if dev is obtained in the same turn
-void buy_dev_card_func( Player *player )
+void buy_dev_card_func( Player *player , card *pcard , int32_t timestamp  )
 {
     player->resource[Sheep] -= 1;
     player->resource[Grain] -= 1;
     player->resource[Ore] -= 1;
     //add card to player's hand
-    for(int32_t i = 0 ; i < 25 ; i++)
+    // for(int32_t i = 0 ; i < 25 ; i++)
+    // {
+    //     if( card[i] != -1 )
+    //     {
+    //         //printf("You have obtained a %s card!\n",card_name[card[i]])
+    //         print_dev_card( card[i] );
+    //         player->dev_card[card[i]] += 1; 
+    //         player->dev_card_num += 1;
+    //         card[i] = -1;
+    //         break;
+    //     }
+    // }
+
+    for( int32_t i = 0 ; i < 25 ; i++ )
     {
-        if( card[i] != -1 )
+        if( pcard[i].type != Card_Empty )
         {
-            //printf("You have obtained a %s card!\n",card_name[card[i]])
-            print_dev_card( card[i] );
-            player->dev_card[card[i]] += 1; 
+            print_dev_card( pcard[i].type );
+            //player->dev_card[pcard[i].type] += 1; 
+            //update player's dev card
+            for( int32_t i = 0 ; i < 25 ; i++ )
+            {
+                if( player->dev_card[i].type == Card_Empty )
+                {
+                    player->dev_card[i].type = pcard[i].type;
+                    player->dev_card[i].timestamp = pcard[i].timestamp;
+                    break;
+                }
+            }
+            player->dev_card_type_num[pcard[i].type] += 1;
             player->dev_card_num += 1;
-            card[i] = -1;
+
+            //update card pile
+            pcard[i].type = Card_Empty;
+            pcard[i].timestamp = timestamp;
             break;
         }
     }
@@ -989,7 +1028,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
 
         if( able_to_steal )
         {
-            steal : printf("Select a player to steal from:(enter 1-6)\n");
+            steal : 
+            printf("Select a player to steal from:(enter 1-6)\n");
             for( int32_t i = 0 ; i < 6 ; i++ )
             {
                 if( steal_index[i] != 0 && steal_index[i] != player1->index )
@@ -999,7 +1039,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
             }
 
             select = 0;
-            scanf("Player's index : %d",&select);
+            printf("Playes's index :");
+            scanf("%d",&select);
             if( select > 6 || select < 1  )
             {
                 printf("Invalid input!\n");
@@ -1015,7 +1056,7 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
 
             //show the resource stolen
             char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
-            printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string[select-1],select);
+            printf("You have stolen 1 %s from player %d\n",resource_string[steal_resource-1],select);
 
             player_start[select-1].resource[steal_resource] -= 1;
             player1->resource[steal_resource] += 1;
@@ -1074,17 +1115,32 @@ void devBuildRoad( Player *player , road *proad )//not done!
             }
         }
     }
+      //print the road that is available
+    for( int32_t i = 0 ; i < 72 ; i++ )
+    {
+        if( road_index[i] != 0 )
+        {
+            printf("%d ",i+1);
+        }
+    }
 
     dev_build : printf("Select a place to build your road:\n");
     /*TODO*/
     int32_t select = 0;
     scanf("%d",&select);
-    if( select > 54 || select < 1 )
+    if( select > 72 || select < 1 || road_index[select-1] == 0 )
     {
         printf("Invalid input!\n");
-        goto dev_build;
-        //devBuildRoad( player , road );
+        goto dev_build ;
     }
+
+    //record road build in player's attributes
+    player->road_num += 1;
+
+    //Update node's attributes
+    (proad + (select-1))->owner = player->index;
+    
+
 
     return;
 }
@@ -1141,7 +1197,7 @@ void Year_of_Plenty( Player *player  )
         printf("Invalid input!\n");
         Year_of_Plenty( player );
     }
-    select1 -= 1;
+   // select1 -= 1;
 
     printf("Select another resource to take:\n");
     printf("1. Brick\n");
@@ -1157,7 +1213,7 @@ void Year_of_Plenty( Player *player  )
         printf("Invalid input!\n");
         Year_of_Plenty( player );
     }
-    select2 -= 1;
+   // select2 -= 1;
 
     player->resource[select1] += 1;
     player->resource[select2] += 1;
@@ -1165,95 +1221,230 @@ void Year_of_Plenty( Player *player  )
     return;
 }
 
-void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , road *proad , tile *ptile , Player *player_start )
+
+void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , road *proad , node* pnode, tile *ptile , Player *player_start )
 {
-    show_dev :
-    if( player->dev_card_num != 0 )
+    show_dev:
+    for( int32_t i = 0 ; i < 5 ; i++ )
     {
-        //check which dev card the player has, and show the player what he can do
-        for( int32_t i = 0 ; i < 5 ; i++)
+        if( player->dev_card_type_num[i] )
         {
-            if( player->dev_card[i] )
+            switch(i)
             {
-                switch(i)
-                {
-                    case Card_Knight:
-                        printf("0)You have %d Knight cards, you can move the robber and steal a resource from a player\n",player->dev_card[i]);
-                        break;
-                    case Card_Victory_Point:
-                        printf("1)You have %d Victory Point cards, you can get 2 victory points\n",player->dev_card[i]);
-                        break;
-                    case Card_Road_Building:
-                        printf("2)You have %d Road Building cards, you can build 2 roads\n",player->dev_card[i]);
-                        break;
-                    case Card_Monopoly:
-                        printf("3)You have %d Monopoly cards, you can monopolize a resource\n",player->dev_card[i]);
-                        break;
-                    case Card_Year_of_Plenty:
-                        printf("4)You have %d Year of Plenty cards, you can take 2 resources from the bank\n",player->dev_card[i]);
-                        break;
-                }
+                case Card_Knight:
+                    printf("0)You have %d Knight cards, you can move the robber and steal a resource from a player\n",player->dev_card_type_num[i]);
+                    break;
+                case Card_Victory_Point:
+                    printf("1)You have %d Victory Point cards, you can get 2 victory points\n",player->dev_card_type_num[i]);
+                    break;
+                case Card_Road_Building:
+                    printf("2)You have %d Road Building cards, you can build 2 roads\n",player->dev_card_type_num[i]);
+                    break;
+                case Card_Monopoly:
+                    printf("3)You have %d Monopoly cards, you can monopolize a resource\n",player->dev_card_type_num[i]);
+                    break;
+                case Card_Year_of_Plenty:
+                    printf("4)You have %d Year of Plenty cards, you can take 2 resources from the bank\n",player->dev_card_type_num[i]);
+                    break;
             }
         }
-
-        printf("Select a card to use:\n");
-        int32_t select = 0;
-        scanf("%d",&select);
-        if( select > 4 || select < 0 || player->dev_card[select] == 0 )
-        {
-            printf("Invalid input!\n");
-            goto show_dev;
-        }
-
-        switch(select)
-        {
-            case 0:
-                if( player->dev_card[Card_Knight] )
-                {
-                    player->dev_card[Card_Knight]--;
-                    //TODO
-                    //move the robber
-                    //steal a resource from a player
-                    moveRobber( ptile , player , player_start );//not done!1!!
-                }
-                break;
-            case 1:
-                if( player->dev_card[Card_Victory_Point] )
-                {
-                    player->dev_card[Card_Victory_Point]--;
-                    player->victory_point += 2;
-                }
-                break;
-            case 2:
-                if( player->dev_card[Card_Road_Building] )
-                {
-                    player->dev_card[Card_Road_Building]--;
-                    //TODO
-                    //build 2 roads
-                    devBuildRoad( player , proad );
-                }
-                break;
-            case 3:
-                if( player->dev_card[Card_Monopoly] )
-                {
-                    player->dev_card[Card_Monopoly]--;
-                    //TODO
-                    //choose a resource and take all of that resource from all players
-                    Monopoly( player , p1 , p2 , p3 );
-                }
-                break;
-            case 4:
-                if( player->dev_card[Card_Year_of_Plenty] )
-                {
-                    player->dev_card[Card_Year_of_Plenty]--;
-                    //TODO
-                    //take two resources from the bank
-                    Year_of_Plenty( player );
-                }
-                break;
-        }
     }
+
+    printf("Select a card to use:\n");
+    int32_t select = 0;
+    scanf("%d",&select);
+    if( select > 4 || select < 0 || player->dev_card_type_num[select] == 0 )
+    {
+        printf("Invalid input!\n");
+        goto show_dev;
+    }
+
+    switch(select)
+    {
+        case 0:
+            if( player->dev_card_type_num[Card_Knight] )
+            {
+                player->dev_card_num--;
+                player->dev_card_type_num[Card_Knight]--;
+                for( int32_t i = 0 ; i < 25 ; i++ )
+                {
+                    if( player->dev_card[i].type == Card_Knight ) {
+                        player->dev_card[i].type = Card_Empty;
+                        player->dev_card[i].timestamp = 0;
+                        break;
+                    }       
+                }
+                //TODO
+                //move the robber
+                //steal a resource from a player
+                moveRobber( ptile , player , player_start );//not done!1!!
+            }
+            break;
+        case 1:
+            if( player->dev_card_type_num[Card_Victory_Point] )
+            {
+                player->dev_card_num--;
+                player->dev_card_type_num[Card_Victory_Point]--;
+                for( int32_t i = 0 ; i < 25 ; i++ )
+                {
+                    if( player->dev_card[i].type == Card_Victory_Point ) {
+                        player->dev_card[i].type = Card_Empty;
+                        player->dev_card[i].timestamp = 0;
+                        break;
+                    }       
+                }
+                player->victory_point += 2;
+            }
+            break;
+        case 2:
+            if( player->dev_card_type_num[Card_Road_Building] )
+            {
+                player->dev_card_num--;
+                player->dev_card_type_num[Card_Road_Building]--;
+                for( int32_t i = 0 ; i < 25 ; i++ )
+                {
+                    if( player->dev_card[i].type == Card_Road_Building ) {
+                        player->dev_card[i].type = Card_Empty;
+                        player->dev_card[i].timestamp = 0;
+                        break;
+                    }       
+                }
+                //TODO
+                //build 2 roads
+                devBuildRoad( player , proad );
+                print_board( ptile , pnode , proad, player_start);
+                devBuildRoad( player , proad );
+            }
+            break;
+        case 3:
+            if( player->dev_card_type_num[Card_Monopoly] )
+            {
+                player->dev_card_num--;
+                player->dev_card_type_num[Card_Monopoly]--;
+                for( int32_t i = 0 ; i < 25 ; i++ )
+                {
+                    if( player->dev_card[i].type == Card_Monopoly ) {
+                        player->dev_card[i].type = Card_Empty;
+                        player->dev_card[i].timestamp = 0;
+                        break;
+                    }       
+                }
+                //TODO
+                //choose a resource and take all of that resource from all players
+                Monopoly( player , p1 , p2 , p3 );
+            }
+            break;
+        case 4:
+            if( player->dev_card_type_num[Card_Year_of_Plenty] )
+            {
+                player->dev_card_num--;
+                player->dev_card_type_num[Card_Year_of_Plenty]--;
+                for( int32_t i = 0 ; i < 25 ; i++ )
+                {
+                    if( player->dev_card[i].type == Card_Year_of_Plenty ) {
+                        player->dev_card[i].type = Card_Empty;
+                        player->dev_card[i].timestamp = 0;
+                        break;
+                    }       
+                }
+                //TODO
+                //take two resources from the bank
+                Year_of_Plenty( player );
+            }
+            break;
+    }
+    return;
 }
+// void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , road *proad , tile *ptile , Player *player_start )
+// {
+//     show_dev :
+//     if( player->dev_card_num != 0 )
+//     {
+//         //check which dev card the player has, and show the player what he can do
+//         for( int32_t i = 0 ; i < 5 ; i++)
+//         {
+//             if( player->dev_card[i] )
+//             {
+//                 switch(i)
+//                 {
+//                     case Card_Knight:
+//                         printf("0)You have %d Knight cards, you can move the robber and steal a resource from a player\n",player->dev_card[i]);
+//                         break;
+//                     case Card_Victory_Point:
+//                         printf("1)You have %d Victory Point cards, you can get 2 victory points\n",player->dev_card[i]);
+//                         break;
+//                     case Card_Road_Building:
+//                         printf("2)You have %d Road Building cards, you can build 2 roads\n",player->dev_card[i]);
+//                         break;
+//                     case Card_Monopoly:
+//                         printf("3)You have %d Monopoly cards, you can monopolize a resource\n",player->dev_card[i]);
+//                         break;
+//                     case Card_Year_of_Plenty:
+//                         printf("4)You have %d Year of Plenty cards, you can take 2 resources from the bank\n",player->dev_card[i]);
+//                         break;
+//                 }
+//             }
+//         }
+
+//         printf("Select a card to use:\n");
+//         int32_t select = 0;
+//         scanf("%d",&select);
+//         if( select > 4 || select < 0 || player->dev_card[select] == 0 )
+//         {
+//             printf("Invalid input!\n");
+//             goto show_dev;
+//         }
+
+//         switch(select)
+//         {
+//             case 0:
+//                 if( player->dev_card[Card_Knight] )
+//                 {
+//                     player->dev_card[Card_Knight]--;
+//                     //TODO
+//                     //move the robber
+//                     //steal a resource from a player
+//                     moveRobber( ptile , player , player_start );//not done!1!!
+//                 }
+//                 break;
+//             case 1:
+//                 if( player->dev_card[Card_Victory_Point] )
+//                 {
+//                     player->dev_card[Card_Victory_Point]--;
+//                     player->victory_point += 2;
+//                 }
+//                 break;
+//             case 2:
+//                 if( player->dev_card[Card_Road_Building] )
+//                 {
+//                     player->dev_card[Card_Road_Building]--;
+//                     //TODO
+//                     //build 2 roads
+//                     devBuildRoad( player , proad );
+//                 }
+//                 break;
+//             case 3:
+//                 if( player->dev_card[Card_Monopoly] )
+//                 {
+//                     player->dev_card[Card_Monopoly]--;
+//                     //TODO
+//                     //choose a resource and take all of that resource from all players
+//                     Monopoly( player , p1 , p2 , p3 );
+//                 }
+//                 break;
+//             case 4:
+//                 if( player->dev_card[Card_Year_of_Plenty] )
+//                 {
+//                     player->dev_card[Card_Year_of_Plenty]--;
+//                     //TODO
+//                     //take two resources from the bank
+//                     Year_of_Plenty( player );
+//                 }
+//                 break;
+//         }
+//     }
+   
+// }
 
 void SetupBuildRoad( Player *player , road *proad )
 {
@@ -1492,6 +1683,9 @@ int main ()
         player[i]->index = i+1;
     }
 
+    card *pCard = calloc(25,sizeof(card));
+    pCard = init_card(pCard);
+
     node *pNode = calloc(54,sizeof(node));
     pNode = init_node(pNode);
  
@@ -1523,28 +1717,28 @@ int main ()
     SetupBuildRoad( player[1] , pRoad );
     print_board( pTile, pNode, pRoad , player[0]);
 
-    SetupBuildSettlement( player[2] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupBuildRoad( player[2] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildSettlement( player[2] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildRoad( player[2] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
 
-    SetupBuildSettlement( player[3] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupBuildRoad( player[3] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildSettlement( player[3] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildRoad( player[3] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
-    settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupObtainResource( settlement_index , player[3] , pNode );
-    SetupBuildRoad( player[3] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupObtainResource( settlement_index , player[3] , pNode );
+    // SetupBuildRoad( player[3] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
-    settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupObtainResource( settlement_index , player[2] , pNode );
-    SetupBuildRoad( player[2] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupObtainResource( settlement_index , player[2] , pNode );
+    // SetupBuildRoad( player[2] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
     settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
     print_board( pTile, pNode, pRoad , player[0]);
@@ -1642,7 +1836,7 @@ int main ()
                 quit = 0;
                 devUsage = 1;//1 means dev card can be used
                 int32_t num = 0;
-                while( is_able_to( player[0] , devUsage , pRoad , pNode ,  &tmp_marine_option , option ) && !quit )
+                while( is_able_to( player[0] , turn , pCard , pRoad , pNode ,  &tmp_marine_option , option ) && !quit )
                 {
                     int32_t c = print_option_menu( option , num );
                     int32_t choice = 0;
@@ -1670,11 +1864,11 @@ int main ()
                     {
                         case 1: 
                             print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[0] );         
+                            buy_dev_card_func( player[0] , pCard , turn );         
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[0] , player[1] , player[2] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[0] , player[1] , player[2] , player[3] , pRoad , pNode, pTile , player[0] );
                             print_board( pTile, pNode, pRoad, player[0]);
                             devUsage++;//update turn
                             break;
@@ -1703,7 +1897,10 @@ int main ()
                         default:
                             break;
                     }
-                    is_game_over( player );//check if any player has 10 points
+                    if(is_game_over( player ))//check if any player has 10 points
+                    {
+                        goto game_over;
+                    }
                     //printf("quit: %d\n", quit);
                 }
                 
@@ -1716,7 +1913,7 @@ int main ()
                 devUsage = 1;//1 means dev card can be used
                 dice_val = roll_dice();
                 obtain_resources( dice_val , player[0] , pTile );
-                while( is_able_to( player[1] , devUsage , pRoad , pNode ,  &tmp_marine_option , option) && !quit )
+                while( is_able_to( player[1] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option) && !quit )
                 {
                     int32_t c = print_option_menu( option , 8 );
                     int32_t choice = 0;
@@ -1739,11 +1936,11 @@ int main ()
                     {
                         case 1: 
                             print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[1] );
+                            buy_dev_card_func( player[1] , pCard , turn);
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad ,pNode, pTile , player[0] );
                             print_board( pTile, pNode, pRoad , player[0]);
                             devUsage++;//update turn
                             break;
@@ -1771,7 +1968,10 @@ int main ()
                         default:
                             break;
                     }
-                    is_game_over( player );//check if any player has 10 points
+                    if(is_game_over( player ))//check if any player has 10 points
+                    {
+                        goto game_over;
+                    }
                 }
                 free( tmp_marine_option);
                 break;
@@ -1781,7 +1981,7 @@ int main ()
                 devUsage = 1;//1 means dev card can be used
                 dice_val = roll_dice();
                 obtain_resources( dice_val , player[0] , pTile );
-                while( is_able_to( player[2] , devUsage , pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
+                while( is_able_to( player[2] , turn  , pCard, pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
                 {
                     int32_t c = print_option_menu( option , 8 );
                     int32_t choice = 0;
@@ -1804,11 +2004,11 @@ int main ()
                     {
                         case 1: 
                             print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[2] );
+                            buy_dev_card_func( player[2] , pCard , turn );
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pNode ,pTile , player[0] );
                             print_board( pTile, pNode, pRoad, player[0]);
                             devUsage++;//update turn
                             break;
@@ -1836,7 +2036,10 @@ int main ()
                         default:
                             break;
                     }
-                    is_game_over( player );//check if any player has 10 points
+                    if(is_game_over( player ))//check if any player has 10 points
+                    {
+                        goto game_over;
+                    }
                 }
                 free( tmp_marine_option);
                 break;
@@ -1847,7 +2050,7 @@ int main ()
                 dice_val = roll_dice();
                 obtain_resources( dice_val , player[0] , pTile );
                 print_player_resource( player[3] );
-                while( is_able_to( player[3] , devUsage , pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
+                while( is_able_to( player[3] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
                 {
                     int32_t c = print_option_menu( option , 8 );
                     int32_t choice = 0;
@@ -1870,11 +2073,11 @@ int main ()
                     {
                         case 1: 
                             print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[3] );
+                            buy_dev_card_func( player[3] , pCard , turn);
                             print_board( pTile, pNode, pRoad , player[0]);
                             break;
                         case 2:
-                            use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pTile , player[0] );
+                            use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pNode , pTile , player[0] );
                             print_board( pTile, pNode, pRoad ,player[0]);
                             devUsage++;//update turn
                             break;
@@ -1902,13 +2105,19 @@ int main ()
                         default:
                             break;
                     }
-                    is_game_over( player );//check if any player has 10 points
+                    if(is_game_over( player ))//check if any player has 10 points
+                    {
+                        goto game_over;
+                    }
                 }
                 free( tmp_marine_option);
                 break;
          }
          turn++;
     }
+
+    game_over:
+    printf("Game Over!\n");
 
     free(pNode);
     free(pTile);
