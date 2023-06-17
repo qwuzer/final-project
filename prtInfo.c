@@ -14,8 +14,8 @@ void prt( int32_t index, char * str , int32_t o){
     printw("%s",str);
     attroff(COLOR_PAIR(o) | A_BLINK);
 }
-void prtNode( Player * player, road * proad, node * pnode ){
-	int32_t build_index[54] = {0};
+void prtNode( Player * player, road * proad, node * pnode ,int32_t build_index[54] ){
+	//int32_t build_index[54] = {0};
 	//TODO:change index to 1 if buyable
     initscr();
 	start_color();
@@ -159,8 +159,8 @@ void prtNode( Player * player, road * proad, node * pnode ){
     endwin();
 	clear();
 }
-void prtRoad( Player * player, road * proad ){
-	int32_t road_index[72] = {0};
+void prtRoad( Player * player, road * proad, int32_t road_index[54] ){
+	//int32_t road_index[72] = {0};
 	//TODO:index[i] turn to 1 if buyable
     initscr();
 
