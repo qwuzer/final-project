@@ -76,7 +76,7 @@ typedef struct _sPlayer
     /*TODO add dev card type*/
     int32_t dev_card_num;
     int32_t dev_card[5];//0-25
-    
+   
 }Player;
 
 

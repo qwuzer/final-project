@@ -720,7 +720,7 @@ road *init_road( road *proad , node *pnode )
         else if(i== 1) { tmp->node1 = ( pnode +  0 ); tmp->node2 = ( pnode +  3); }
         else if(i== 2) { tmp->node1 = ( pnode +  1 ); tmp->node2 = ( pnode +  4); }
         else if(i== 3) { tmp->node1 = ( pnode +  2 ); tmp->node2 = ( pnode +  3); }
-        else if(i== 4) { tmp->node1 = ( pnode +  7 ); tmp->node2 = ( pnode +  8); }
+        else if(i== 4) { tmp->node1 = ( pnode +  4 ); tmp->node2 = ( pnode +  5); }//
         else if(i== 5) { tmp->node1 = ( pnode +  2 ); tmp->node2 = ( pnode +  7); }
         else if(i== 6) { tmp->node1 = ( pnode +  3 ); tmp->node2 = ( pnode +  8); }
         else if(i== 7) { tmp->node1 = ( pnode +  4 ); tmp->node2 = ( pnode +  9); }

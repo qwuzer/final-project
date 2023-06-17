@@ -37,7 +37,7 @@ void obtain_resources( int32_t sum , Player *player , tile *ptile )
                     if( ptile[i].nodes[j]->type == 1 )//settlment 
                     {
                         player[ptile[i].nodes[j]->owner - 1].resource[ptile[i].resource_type] += 1;
-                        //printf("Player %d obtained 1 %s\n",ptile[i].nodes[j]->owner + 1,resource_string[ptile[i].resource_type]);
+                    printf("Player %d obtained 1 %s\n",ptile[i].nodes[j]->owner ,resource_string[ptile[i].resource_type-1]);
                     }
                     else if( ptile[i].nodes[j]->type == 2 )//city
                     {
@@ -164,7 +164,7 @@ void marine_trade_func( Player *player , int32_t *tmp_marine_option  )
                     printf("2.)Trade 2 bricks for 1 resource!\n");
                     break;
                 case 3:
-                    printf("3.)Trade 2 wood for 1 resource!\n");
+                    printf("3.)Trade 2 lumber for 1 resource!\n");
                     break;
                 case 4:
                     printf("4.)Trade 2 sheep for 1 resource!\n");
@@ -199,7 +199,7 @@ void marine_trade_func( Player *player , int32_t *tmp_marine_option  )
 
     int32_t select = 0;
     printf("Select a resource you wish to obtain.\n");
-    printf("1.)Brick 2.)Wood 3.)Sheep 4.)Grain 5.)Ore\n");
+    printf("1.)Brick 2.)Lumber 3.)Sheep 4.)Grain 5.)Ore\n");
     scanf("%d",&select);
     //TODO input check
 
@@ -207,7 +207,7 @@ void marine_trade_func( Player *player , int32_t *tmp_marine_option  )
     {
         case 1:        
             printf("Select a resource you wish to give.\n");
-            printf("1.)Brick 2.)Wood 3.)Sheep 4.)Grain 5.)Ore\n");
+            printf("1.)Brick 2.)Lumber 3.)Sheep 4.)Grain 5.)Ore\n");
             int32_t choose1;
             scanf("%d",&choose1);
             // if( choose1 > 5 || choose1 < 1 || player->resource[choose1] < 3 )
@@ -1033,6 +1033,7 @@ void devBuildRoad( Player *player , road *proad )//not done!
         road *road = proad + i;
 
         if( road->owner == 0 ) {
+            //check if the road is connected to other roads of the player
             if( road->dir1 != NULL )
             {
                 if( road->dir1->owner == player->index )
@@ -1062,6 +1063,7 @@ void devBuildRoad( Player *player , road *proad )//not done!
                 }
             }
 
+            //check if the road is connected to other nodes of the player
             if( road->node1->owner == player->index )
             {
                 road_index[i] = 1;
@@ -1516,39 +1518,39 @@ int main ()
     SetupBuildRoad( player[0] , pRoad );
     print_board( pTile, pNode, pRoad , player[0]);
 
-    // SetupBuildSettlement( player[1] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupBuildRoad( player[1] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildSettlement( player[1] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[1] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // SetupBuildSettlement( player[2] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupBuildRoad( player[2] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildSettlement( player[2] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[2] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
 
-    // SetupBuildSettlement( player[3] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupBuildRoad( player[3] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildSettlement( player[3] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupBuildRoad( player[3] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupObtainResource( settlement_index , player[3] , pNode );
-    // SetupBuildRoad( player[3] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[3] , pNode );
+    SetupBuildRoad( player[3] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupObtainResource( settlement_index , player[2] , pNode );
-    // SetupBuildRoad( player[2] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[2] , pNode );
+    SetupBuildRoad( player[2] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
-    // settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
-    // print_board( pTile, pNode, pRoad , player[0]);
-    // SetupObtainResource( settlement_index , player[1] , pNode );
-    // SetupBuildRoad( player[1] , pRoad );
-    // print_board( pTile, pNode, pRoad , player[0]);
+    settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
+    print_board( pTile, pNode, pRoad , player[0]);
+    SetupObtainResource( settlement_index , player[1] , pNode );
+    SetupBuildRoad( player[1] , pRoad );
+    print_board( pTile, pNode, pRoad , player[0]);
 
     settlement_index = SetupBuildSettlement( player[0] , pRoad , pNode );
     print_board( pTile, pNode, pRoad , player[0]);
@@ -1638,14 +1640,13 @@ int main ()
                 dice_val = roll_dice();
                 obtain_resources( dice_val , player[0] , pTile );
                 quit = 0;
-                devUsage = 0;//1 means dev card can be used
+                devUsage = 1;//1 means dev card can be used
                 int32_t num = 0;
                 while( is_able_to( player[0] , devUsage , pRoad , pNode ,  &tmp_marine_option , option ) && !quit )
                 {
                     int32_t c = print_option_menu( option , num );
                     int32_t choice = 0;
-                    
-                    //this is a terrible design but bear with me :(
+
                     //offers the choice
                     for( int32_t i = 0 ; i < 8 ; i++ )
                     {   
