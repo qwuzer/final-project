@@ -1162,13 +1162,13 @@ void Monopoly( Player *monopoler , Player *p1, Player *p2 , Player *p3 )
         printf("Invalid input!\n");
         Monopoly( monopoler , p1 , p2 , p3 );
     }
-    select -= 1;
+    //select -= 1;
 
     //show how many resources the player has monopolized from other players
     char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
-    printf("You have monopolized %d %s from player 1\n",p1->resource[select],resource_string[select]);
-    printf("You have monopolized %d %s from player 2\n",p2->resource[select],resource_string[select]);
-    printf("You havezed %d %s from player 3\n",p3->resource[select],resource_string[select]);
+    printf("You have monopolized %d %s from player %d\n",p1->resource[select],resource_string[select-1],p1->index);
+    printf("You have monopolized %d %s from player %d\n",p2->resource[select],resource_string[select-1],p2->index);
+    printf("You have monopolized %d %s from player %d\n",p3->resource[select],resource_string[select-1],p3->index);
 
     int32_t total = p1->resource[select] + p2->resource[select] + p3->resource[select];
     monopoler->resource[select] += total;
@@ -1702,6 +1702,9 @@ int main ()
     player[0]->resource[Lumber] = 5;
     player[0]->resource[Ore] = 5;
     print_board( pTile, pNode, pRoad , player[0] );
+
+
+    player[1]->resource[Brick] = 5;
 
     int32_t settlement_index = 0;
 /*init*/
