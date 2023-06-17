@@ -156,8 +156,9 @@ void prtNode( Player * player, road * proad, node * pnode ,int32_t build_index[5
     refresh();
     // Wait for user input
     getch();
-    endwin();
 	clear();
+    endwin();
+	
 }
 void prtRoad( Player * player, road * proad, int32_t road_index[54] ){
 	//int32_t road_index[72] = {0};
