@@ -15,6 +15,7 @@ typedef struct _arg
     tile *t;
     node *n;
     road *r;
+    int32_t me;
 }Arg;
 
 
@@ -38,6 +39,7 @@ int32_t ai_find_empty_road( Arg arg );
 int32_t ai_find_empty_node( Arg arg );
 int32_t ai_find_village( Arg arg );
 void ai_move_robber( int32_t where , Arg arg );
+void ai_get_resourse( int32_t dice , Arg arg );
 
 // for advance
 //public function
@@ -52,13 +54,14 @@ void ai_judge_for_buy_card();
 void ai_sort_resource();
 
 
-void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road )
+void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num )
 {
     Arg arg;
     arg.p = ptr_player;
     arg.t = ptr_tile;
     arg.n = ptr_node;
     arg.r = ptr_road;
+    arg.me = index_num;
     int32_t dice = roll_the_dice();
     // no buy card
     // no trade
@@ -66,6 +69,10 @@ void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_r
     if( dice == 7 )
     {
         ai_move_robber( -1 , arg ); 
+    }
+    else
+    {
+        ai_get_resorce( arg );
     }
     // upgrade villige
     ai_upgrade( ai_find_villige( arg ) , arg );
@@ -110,7 +117,7 @@ void ai_set_road( int32_t where , Arg arg )
         //check place and road_num
         if( where!=-1 && arg.p->road_num>0 )
         {
-            int32_t who = arg.p->index;
+            int32_t who = arg.me;
             printf("This is player %d, I want to build a road at %d.\n", who , where );
             
             arg.p->resource[1] -= 1;
@@ -146,7 +153,7 @@ void ai_set_village( int32_t where , Arg arg )
         //check place and settlement_num
         if( where!=-1 && arg.p->settlement_num>0 )
         {
-            int32_t who = arg.p->index;
+            int32_t who = arg.me;
             printf("This is player %d, I want to build a village at %d.\n", who , where );
             
             arg.p->resource[1] -= 1;
@@ -184,7 +191,7 @@ void ai_upgrade( int32_t where , Arg arg )
         //check place and city_num
         if( where!=-1 && arg.p->city_num>0 )
         {
-            int32_t who = arg.p->index;
+            int32_t who = arg.me;
             printf("This is player %d, I want to build a city at %d.\n", who , where );
             
             arg.p->resource[2] -= 2;
@@ -211,7 +218,7 @@ void ai_upgrade( int32_t where , Arg arg )
 
 int32_t ai_find_empty_road( Arg arg )
 {
-    int32_t who = arg.p->index;
+    int32_t who = arg.me;
     int32_t ava[72] = {};
 
     // find all avaliable road
@@ -274,7 +281,7 @@ int32_t ai_find_empty_road( Arg arg )
 
 int32_t ai_find_empty_node( Arg arg )
 {
-    int32_t who = arg.p->index;
+    int32_t who = arg.me;
     int32_t ava[54] = {};
 
     // pick node beside my roads
@@ -333,7 +340,7 @@ int32_t ai_find_empty_node( Arg arg )
 
 int32_t ai_find_village( Arg arg )
 {
-    int32_t who = arg.p->index;
+    int32_t who = arg.me;
     int32_t ava[54] = {};
     int32_t count = 0;
 
@@ -375,18 +382,96 @@ void ai_move_robber( int32_t where , Arg arg )
     }
     else
     {
-        target_tile = where;
+        target_tile = where-1;
     }
 
-    //origin
+    // find origin and move it
     int32_t origin = -1;
-    for(int32_t i=0 ; i<19 ; ++i )
+    for( int32_t i=0 ; i<19 ; ++i )
     {
-        if( *(arg.t+target_tile).robber == 1 )
+        if( *(arg.t+i).robber == 1 )
         {
             origin = i;
-            *(arg.t+target_tile).robber = 0 ;
+            *(arg.t+i).robber = 0 ;
             break;
+        }
+    }
+    *(arg.t+target_tile).robber = 1;
+
+    // start to rob
+    int32_t list_num = 0;
+    int32_t rob_list[3] = {}
+    int32_t who = arg.me;
+    // choose target
+    for( int32_t i=0 ; i<6 ; ++i )
+    {
+        if(*(arg.t+target_tile).node[i]->owner != 0  &&
+           *(arg.t+target_tile).node[i]->owner != who)
+        {
+            //check if record again
+            int32_t rec = 0;
+            for(int32_t j=0 ; j<list_num ; ++j )
+            {
+                if( rob_list[j] == *(arg.t+target_tile).node[i]->owner )
+                {
+                    rec = 1;
+                }
+            }
+            if( rec == 0 )
+            {
+                rob_list[list_num] = *(arg.t+target_tile).node[i]->owner;
+                list_num += 1;
+            }
+        }
+    }
+
+    if( list_num != 0 )
+    {
+        srand( time(NULL) );
+        for(int32_t i=0 ; i<list_num ; ++i )
+        {
+            if( *(arg.p + list_num[i]).resource[1] +
+                *(arg.p + list_num[i]).resource[2] +
+                *(arg.p + list_num[i]).resource[3] +
+                *(arg.p + list_num[i]).resource[4] +
+                *(arg.p + list_num[i]).resource[5] != 0)
+            {
+                int32_t j=1;
+                for( ; j<6 ; ++j)
+                {
+                    if(*(arg.p + list_num[i]).resource[j] >0)
+                    {
+                        *(arg.p + list_num[i]).resource[j] -= 1;
+                        break;
+                    }
+                }
+                *(arg.p + who).resource[j] += 1;
+                break;
+            }
+        }
+    }
+}
+
+
+void ai_get_resourse( int32_t dice , Arg arg )
+{
+    int32_t who = arg.me;
+    for( int32_t i=0 ; i<19 ; ++i )
+    {
+        if( *( arg.t+i ).dice_num == dice &&
+            *( arg.t+i ).robber == 0 )
+        {
+            for(int j=0;i<6;++j)
+            {
+                if(*(arg.t+i).node[6]->type == 1 )
+                {
+                    *(arg.p+(*(arg.t+i).node[6]->owner)).resource[*(arg.t+i).resource_type] += 1;
+                }
+                if(*(arg.t+i).node[6]->type == 2 )
+                {
+                    *(arg.p+(*(arg.t+i).node[6]->owner)).resource[*(arg.t+i).resource_type] += 1;
+                }
+            }
         }
     }
 }
