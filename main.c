@@ -1028,7 +1028,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
 
         if( able_to_steal )
         {
-            steal : printf("Select a player to steal from:(enter 1-6)\n");
+            steal : 
+            printf("Select a player to steal from:(enter 1-6)\n");
             for( int32_t i = 0 ; i < 6 ; i++ )
             {
                 if( steal_index[i] != 0 && steal_index[i] != player1->index )
@@ -1038,7 +1039,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
             }
 
             select = 0;
-            scanf("Player's index : %d",&select);
+            printf("Playes's index :");
+            scanf("%d",&select);
             if( select > 6 || select < 1  )
             {
                 printf("Invalid input!\n");
@@ -1054,7 +1056,7 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
 
             //show the resource stolen
             char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
-            printf("You have stolen %d %s from player %d\n",player_start[select-1].resource[steal_resource],resource_string[select-1],select);
+            printf("You have stolen 1 %s from player %d\n",resource_string[steal_resource-1],select);
 
             player_start[select-1].resource[steal_resource] -= 1;
             player1->resource[steal_resource] += 1;
@@ -1693,28 +1695,28 @@ int main ()
     SetupBuildRoad( player[1] , pRoad );
     print_board( pTile, pNode, pRoad , player[0]);
 
-    SetupBuildSettlement( player[2] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupBuildRoad( player[2] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildSettlement( player[2] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildRoad( player[2] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
 
-    SetupBuildSettlement( player[3] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupBuildRoad( player[3] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildSettlement( player[3] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupBuildRoad( player[3] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
-    settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupObtainResource( settlement_index , player[3] , pNode );
-    SetupBuildRoad( player[3] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // settlement_index = SetupBuildSettlement( player[3] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupObtainResource( settlement_index , player[3] , pNode );
+    // SetupBuildRoad( player[3] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
-    settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
-    print_board( pTile, pNode, pRoad , player[0]);
-    SetupObtainResource( settlement_index , player[2] , pNode );
-    SetupBuildRoad( player[2] , pRoad );
-    print_board( pTile, pNode, pRoad , player[0]);
+    // settlement_index = SetupBuildSettlement( player[2] , pRoad , pNode );
+    // print_board( pTile, pNode, pRoad , player[0]);
+    // SetupObtainResource( settlement_index , player[2] , pNode );
+    // SetupBuildRoad( player[2] , pRoad );
+    // print_board( pTile, pNode, pRoad , player[0]);
 
     settlement_index = SetupBuildSettlement( player[1] , pRoad , pNode );
     print_board( pTile, pNode, pRoad , player[0]);
