@@ -6,6 +6,7 @@
 #include "init.h"
 #include "color.h"
 #include "prt_board2.h"
+#include "ai.h"
 
 //generate random number
 int32_t roll_dice()
@@ -1910,211 +1911,218 @@ int main ()
                 free( tmp_marine_option);
                 break;
             case 2:
-                print_board( pTile, pNode, pRoad , player[0] );
-                printf( "Player 2's turn\n" );
-                quit = 0;
-                devUsage = 1;//1 means dev card can be used
-                dice_val = roll_dice();
-                obtain_resources( dice_val , player[0] , pTile );
-                while( is_able_to( player[1] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option) && !quit )
-                {
-                    int32_t c = print_option_menu( option , 8 );
-                    int32_t choice = 0;
-                    
-                    //this is a terrible design but bear with me :(
-                    //offers the choice
-                    for( int32_t i = 0 ; i < 8 ; i++ )
-                    {   
-                        if( option[i] == 1 )
-                        {
-                            choice++;
-                        }
-                        if( choice == c )
-                        {
-                            choice = i + 1;
-                            break;
-                        }
-                    }
-                    switch( choice )
-                    {
-                        case 1: 
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[1] , pCard , turn);
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 2:
-                            use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad ,pNode, pTile , player[0] );
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            devUsage++;//update turn
-                            break;
-                        case 3:
-                            //trade_with_player( player[0] );
-                            break;
-                        case 4:
-                            marine_trade_func( player[1] , tmp_marine_option);
-                            break;
-                        case 5:
-                            build_settlement_func( player[1] , pRoad , pNode );
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 6:
-                            build_road_func( player[1]  , pRoad );
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 7:
-                            build_city_func( player[1] , pNode , pRoad );
-                            print_board( pTile, pNode, pRoad, player[0]);
-                            break;
-                        case 8:
-                            quit = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                    if(is_game_over( player ))//check if any player has 10 points
-                    {
-                        goto game_over;
-                    }
-                }
-                free( tmp_marine_option);
-                break;
+                ai_turn( player[0] , pTile , pNode , pRoad , turn );
             case 3:
-                printf( "Player 3's turn\n" );
-                quit = 0;
-                devUsage = 1;//1 means dev card can be used
-                dice_val = roll_dice();
-                obtain_resources( dice_val , player[0] , pTile );
-                while( is_able_to( player[2] , turn  , pCard, pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
-                {
-                    int32_t c = print_option_menu( option , 8 );
-                    int32_t choice = 0;
-                    
-                    //this is a terrible design but bear with me :(
-                    //offers the choice
-                    for( int32_t i = 0 ; i < 8 ; i++ )
-                    {   
-                        if( option[i] == 1 )
-                        {
-                            choice++;
-                        }
-                        if( choice == c )
-                        {
-                            choice = i + 1;
-                            break;
-                        }
-                    }
-                    switch( choice )
-                    {
-                        case 1: 
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[2] , pCard , turn );
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 2:
-                            use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pNode ,pTile , player[0] );
-                            print_board( pTile, pNode, pRoad, player[0]);
-                            devUsage++;//update turn
-                            break;
-                        case 3:
-                            //trade_with_player( player[0] );
-                            break;
-                        case 4:
-                            marine_trade_func( player[2] , tmp_marine_option);
-                            break;
-                        case 5:
-                            build_settlement_func( player[2] , pRoad , pNode );
-                            print_board( pTile, pNode, pRoad, player[0] );
-                            break;
-                        case 6:
-                            build_road_func( player[2]  , pRoad );
-                            print_board( pTile, pNode, pRoad ,player[0]);
-                            break;
-                        case 7:
-                            build_city_func( player[2] , pNode , pRoad );
-                            print_board( pTile, pNode, pRoad, player[0] );
-                            break;
-                        case 8:
-                            quit = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                    if(is_game_over( player ))//check if any player has 10 points
-                    {
-                        goto game_over;
-                    }
-                }
-                free( tmp_marine_option);
-                break;
+                ai_turn( player[0] , pTile , pNode , pRoad , turn );
             case 4:
-                printf( "Player 4's turn\n" );
-                quit = 0;
-                devUsage = 1;//1 means dev card can be used
-                dice_val = roll_dice();
-                obtain_resources( dice_val , player[0] , pTile );
-                print_player_resource( player[3] );
-                while( is_able_to( player[3] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
-                {
-                    int32_t c = print_option_menu( option , 8 );
-                    int32_t choice = 0;
+                ai_turn( player[0] , pTile , pNode , pRoad ,  turn );
+
+        //     // case 2:
+        //     //     print_board( pTile, pNode, pRoad , player[0] );
+        //     //     printf( "Player 2's turn\n" );
+        //     //     quit = 0;
+        //     //     devUsage = 1;//1 means dev card can be used
+        //     //     dice_val = roll_dice();
+        //     //     obtain_resources( dice_val , player[0] , pTile );
+        //     //     while( is_able_to( player[1] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option) && !quit )
+        //     //     {
+        //     //         int32_t c = print_option_menu( option , 8 );
+        //     //         int32_t choice = 0;
                     
-                    //this is a terrible design but bear with me :(
-                    //offers the choice
-                    for( int32_t i = 0 ; i < 8 ; i++ )
-                    {   
-                        if( option[i] == 1 )
-                        {
-                            choice++;
-                        }
-                        if( choice == c )
-                        {
-                            choice = i + 1;
-                            break;
-                        }
-                    }
-                    switch( choice )
-                    {
-                        case 1: 
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            buy_dev_card_func( player[3] , pCard , turn);
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 2:
-                            use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pNode , pTile , player[0] );
-                            print_board( pTile, pNode, pRoad ,player[0]);
-                            devUsage++;//update turn
-                            break;
-                        case 3:
-                            //trade_with_player( player[0] );
-                            break;
-                        case 4:
-                            marine_trade_func( player[3] , tmp_marine_option);
-                            break;
-                        case 5:
-                            build_settlement_func( player[3] , pRoad , pNode );
-                            print_board( pTile, pNode, pRoad, player[0] );
-                            break;
-                        case 6:
-                            build_road_func( player[3]  , pRoad );
-                            print_board( pTile, pNode, pRoad ,player[0]);
-                            break;
-                        case 7:
-                            build_city_func( player[3] , pNode , pRoad );
-                            print_board( pTile, pNode, pRoad , player[0]);
-                            break;
-                        case 8:
-                            quit = 1;
-                            break;
-                        default:
-                            break;
-                    }
-                    if(is_game_over( player ))//check if any player has 10 points
-                    {
-                        goto game_over;
-                    }
-                }
-                free( tmp_marine_option);
-                break;
+        //     //         //this is a terrible design but bear with me :(
+        //     //         //offers the choice
+        //     //         for( int32_t i = 0 ; i < 8 ; i++ )
+        //     //         {   
+        //     //             if( option[i] == 1 )
+        //     //             {
+        //     //                 choice++;
+        //     //             }
+        //     //             if( choice == c )
+        //     //             {
+        //     //                 choice = i + 1;
+        //     //                 break;
+        //     //             }
+        //     //         }
+        //     //         switch( choice )
+        //     //         {
+        //     //             case 1: 
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 buy_dev_card_func( player[1] , pCard , turn);
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 break;
+        //     //             case 2:
+        //     //                 use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad ,pNode, pTile , player[0] );
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 devUsage++;//update turn
+        //     //                 break;
+        //     //             case 3:
+        //     //                 //trade_with_player( player[0] );
+        //     //                 break;
+        //     //             case 4:
+        //     //                 marine_trade_func( player[1] , tmp_marine_option);
+        //     //                 break;
+        //     //             case 5:
+        //     //                 build_settlement_func( player[1] , pRoad , pNode );
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 break;
+        //     //             case 6:
+        //     //                 build_road_func( player[1]  , pRoad );
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 break;
+        //     //             case 7:
+        //     //                 build_city_func( player[1] , pNode , pRoad );
+        //     //                 print_board( pTile, pNode, pRoad, player[0]);
+        //     //                 break;
+        //     //             case 8:
+        //     //                 quit = 1;
+        //     //                 break;
+        //     //             default:
+        //     //                 break;
+        //     //         }
+        //     //         if(is_game_over( player ))//check if any player has 10 points
+        //     //         {
+        //     //             goto game_over;
+        //     //         }
+        //     //     }
+        //     //     free( tmp_marine_option);
+        //     //     break;
+        //     // case 3:
+        //     //     printf( "Player 3's turn\n" );
+        //     //     quit = 0;
+        //     //     devUsage = 1;//1 means dev card can be used
+        //     //     dice_val = roll_dice();
+        //     //     obtain_resources( dice_val , player[0] , pTile );
+        //     //     while( is_able_to( player[2] , turn  , pCard, pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
+        //     //     {
+        //     //         int32_t c = print_option_menu( option , 8 );
+        //     //         int32_t choice = 0;
+                    
+        //     //         //this is a terrible design but bear with me :(
+        //     //         //offers the choice
+        //     //         for( int32_t i = 0 ; i < 8 ; i++ )
+        //     //         {   
+        //     //             if( option[i] == 1 )
+        //     //             {
+        //     //                 choice++;
+        //     //             }
+        //     //             if( choice == c )
+        //     //             {
+        //     //                 choice = i + 1;
+        //     //                 break;
+        //     //             }
+        //     //         }
+        //     //         switch( choice )
+        //     //         {
+        //     //             case 1: 
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 buy_dev_card_func( player[2] , pCard , turn );
+        //     //                 print_board( pTile, pNode, pRoad , player[0]);
+        //     //                 break;
+        //     //             case 2:
+        //     //                 use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pNode ,pTile , player[0] );
+        //     //                 print_board( pTile, pNode, pRoad, player[0]);
+        //     //                 devUsage++;//update turn
+        //     //                 break;
+        //     //             case 3:
+        //     //                 //trade_with_player( player[0] );
+        //     //                 break;
+        //     //             case 4:
+        //     //                 marine_trade_func( player[2] , tmp_marine_option);
+        //     //                 break;
+        //     //             case 5:
+        //     //                 build_settlement_func( player[2] , pRoad , pNode );
+        //     //                 print_board( pTile, pNode, pRoad, player[0] );
+        //     //                 break;
+        //     //             case 6:
+        //     //                 build_road_func( player[2]  , pRoad );
+        //     //                 print_board( pTile, pNode, pRoad ,player[0]);
+        //     //                 break;
+        //     //             case 7:
+        //     //                 build_city_func( player[2] , pNode , pRoad );
+        //     //                 print_board( pTile, pNode, pRoad, player[0] );
+        //     //                 break;
+        //     //             case 8:
+        //     //                 quit = 1;
+        //     //                 break;
+        //     //             default:
+        //     //                 break;
+        //     //         }
+        //     //         if(is_game_over( player ))//check if any player has 10 points
+        //     //         {
+        //     //             goto game_over;
+        //     //         }
+        //     //     }
+        //     //     free( tmp_marine_option);
+        //     //     break;
+        //     // case 4:
+        //         printf( "Player 4's turn\n" );
+        //         quit = 0;
+        //         devUsage = 1;//1 means dev card can be used
+        //         dice_val = roll_dice();
+        //         obtain_resources( dice_val , player[0] , pTile );
+        //         print_player_resource( player[3] );
+        //         while( is_able_to( player[3] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option )&& !quit )
+        //         {
+        //             int32_t c = print_option_menu( option , 8 );
+        //             int32_t choice = 0;
+                    
+        //             //this is a terrible design but bear with me :(
+        //             //offers the choice
+        //             for( int32_t i = 0 ; i < 8 ; i++ )
+        //             {   
+        //                 if( option[i] == 1 )
+        //                 {
+        //                     choice++;
+        //                 }
+        //                 if( choice == c )
+        //                 {
+        //                     choice = i + 1;
+        //                     break;
+        //                 }
+        //             }
+        //             switch( choice )
+        //             {
+        //                 case 1: 
+        //                     print_board( pTile, pNode, pRoad , player[0]);
+        //                     buy_dev_card_func( player[3] , pCard , turn);
+        //                     print_board( pTile, pNode, pRoad , player[0]);
+        //                     break;
+        //                 case 2:
+        //                     use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pNode , pTile , player[0] );
+        //                     print_board( pTile, pNode, pRoad ,player[0]);
+        //                     devUsage++;//update turn
+        //                     break;
+        //                 case 3:
+        //                     //trade_with_player( player[0] );
+        //                     break;
+        //                 case 4:
+        //                     marine_trade_func( player[3] , tmp_marine_option);
+        //                     break;
+        //                 case 5:
+        //                     build_settlement_func( player[3] , pRoad , pNode );
+        //                     print_board( pTile, pNode, pRoad, player[0] );
+        //                     break;
+        //                 case 6:
+        //                     build_road_func( player[3]  , pRoad );
+        //                     print_board( pTile, pNode, pRoad ,player[0]);
+        //                     break;
+        //                 case 7:
+        //                     build_city_func( player[3] , pNode , pRoad );
+        //                     print_board( pTile, pNode, pRoad , player[0]);
+        //                     break;
+        //                 case 8:
+        //                     quit = 1;
+        //                     break;
+        //                 default:
+        //                     break;
+        //             }
+        //             if(is_game_over( player ))//check if any player has 10 points
+        //             {
+        //                 goto game_over;
+        //             }
+        //         }
+        //         free( tmp_marine_option);
+        //         break;
          }
          turn++;
     }

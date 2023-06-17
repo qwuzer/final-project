@@ -9,14 +9,14 @@
 // ai = "a" lot of "i"f-else 
 
 
-typedef struct _arg
-{
-    Player *p;
-    tile *t;
-    node *n;
-    road *r;
-    int32_t me;
-}Arg;
+// typedef struct _arg
+// {
+//     Player *p;
+//     tile *t;
+//     node *n;
+//     road *r;
+//     int32_t me;
+// }Arg;
 
 
 int32_t roll_the_dice()
@@ -39,7 +39,7 @@ int32_t ai_find_empty_road( Arg arg );
 int32_t ai_find_empty_node( Arg arg );
 int32_t ai_find_village( Arg arg );
 void ai_move_robber( int32_t where , Arg arg );
-void ai_get_resourse( int32_t dice , Arg arg );
+void ai_get_resource( int32_t dice , Arg arg );
 
 // for advance
 //public function
@@ -72,10 +72,10 @@ void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_r
     }
     else
     {
-        ai_get_resorce( arg );
+        ai_get_resource( arg );
     }
     // upgrade villige
-    ai_upgrade( ai_find_villige( arg ) , arg );
+    ai_upgrade( ai_find_village( arg ) , arg );
     // build village
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
