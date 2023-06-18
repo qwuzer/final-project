@@ -12,7 +12,7 @@
 
 int32_t roll_the_dice()
 {
-    srand( time(NULL) );
+    
     int32_t dice1 = rand() % 6 + 1;
     int32_t dice2 = rand() % 6 + 1;
     int32_t sum = dice1 + dice2;
@@ -55,6 +55,7 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
     arg.n = ptr_node;
     arg.r = ptr_road;
     arg.me = index_num;
+    srand( time(NULL) );
     int32_t dice = roll_the_dice();
     printf("I roll the dice and get %d.\n",dice);
     sleep(1);
@@ -83,6 +84,8 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
     printf("At the end maybe I can ...\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
     sleep(3);
+    printf("That's all,next one~\n");
+    sleep(5);
 }
 
 // void ai_advanced_pro_max_plus_ultra_turn()
