@@ -494,8 +494,8 @@ void print_all( Player ** player ){
         }
 		check_owner( player[i] -> index );
         printf("Player %d: "CLR_RST, i + 1);
-		if( chkR && chkA ) printf("%d\n", player[i] -> victory_point + 4) ; 
-		else if( chkR || chkA ) printf("%d\n", player[i] -> victory_point + 2 );
+		if( player[i] -> longest_road && player[i] -> largest_army ) printf("%d\n", player[i] -> victory_point + 4) ; 
+		else if( player[i] -> longest_road || player[i] -> largest_army ) printf("%d\n", player[i] -> victory_point + 2 );
 		else printf("%d\n", victory_point );
     }
 	if( chkR ){
