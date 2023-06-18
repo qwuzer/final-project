@@ -310,7 +310,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	check_owner( pRoad[42].owner );
 	printf("/"CLR_RST);
 	printf(" \\ ");
-	printf("     ");printf("| ");printf(CLR_24_BG(208,102,51));printf("	"CLR_RST"Brick:       %d   |\n", pPlayer->resource[1] );
+	printf("     ");printf("| ");printf(CLR_24_BG(208,102,51));printf("	"CLR_RST"Brick:% 8d   |\n", pPlayer->resource[1] );
 	////the code above is for line 12-------------------------
     printf("  ?---");
 	print_node( pNode[30] );//printf("*");
@@ -330,7 +330,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[35] );//printf("*");
 	printf("---G");
-	printf("     ");printf("| ");printf( CLR_24_BG( 105, 139, 34 ) );printf("  "CLR_RST"Grain:       %d   |\n", pPlayer->resource[2] );
+	printf("     ");printf("| ");printf( CLR_24_BG( 105, 139, 34 ) );printf("  "CLR_RST"Grain:% 8d   |\n", pPlayer->resource[2] );
 	////the code above is for line 13-------------------------
     printf("     ");
 	check_owner( pRoad[46].owner );
@@ -355,7 +355,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[51].owner );
 	printf("\\"CLR_RST" ");
-	printf("       ");printf("| ");printf(CLR_24_BG(139, 139, 0));printf("  "CLR_RST"Sheep:       %d   |\n", pPlayer->resource[3] );
+	printf("       ");printf("| ");printf(CLR_24_BG(139, 139, 0));printf("  "CLR_RST"Sheep:% 8d   |\n", pPlayer->resource[3] );
 	////the code above is for line 14-------------------------
     printf("    ");
 	print_node( pNode[36] );//printf("*");
@@ -375,7 +375,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("% 4d   "CLR_RST, pTile[8].dice_num);
 	print_node( pNode[41] );//printf("*");
 	//printf("\n");
-	printf("       ");printf("| ");printf( CLR_24_BG( 34, 139, 34 ) );printf("  "CLR_RST"Lumber:      %d   |\n", pPlayer->resource[4] );
+	printf("       ");printf("| ");printf( CLR_24_BG( 34, 139, 34 ) );printf("  "CLR_RST"Lumber:% 7d   |\n", pPlayer->resource[4] );
 	////the code above is for line 15-------------------------
     printf("     ");
 	check_owner( pRoad[54].owner );	
@@ -400,7 +400,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[59].owner );
 	printf("/"CLR_RST);
-	printf("        ");printf("| ");printf( CLR_24_BG( 131, 139, 131 ) );printf("  "CLR_RST"Ore:         %d   |\n", pPlayer->resource[5] );
+	printf("        ");printf("| ");printf( CLR_24_BG( 131, 139, 131 ) );printf("  "CLR_RST"Ore:% 10d   |\n", pPlayer->resource[5] );
 	////the code above is for line 16-------------------------
     printf("      ");
 	print_node( pNode[42] );//printf("*");
@@ -450,7 +450,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	check_owner( pRoad[68].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[51] );//printf("*");
-	printf("---O");printf("           ");printf("|   Road:        %d   |\n", pPlayer->road_num );
+	printf("---O");printf("           ");printf("|   Road:% 9d   |\n", pPlayer->road_num );
 	////the code above is for line 19-------------------------
     printf("                 ");
 	check_owner( pRoad[69].owner );
@@ -459,7 +459,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[70].owner );
 	printf("/"CLR_RST);
-	printf("    ");printf("                ");printf("|   Knight:      %d   |\n", pPlayer->knight_num );
+	printf("    ");printf("                ");printf("|   Knight:% 7d   |\n", pPlayer->knight_num );
 	////the code above is for line 20-------------------------printf("+--------------------+\n");
 	printf("                  ");
 	print_node( pNode[52] );//printf("*");
