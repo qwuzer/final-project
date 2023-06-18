@@ -71,12 +71,15 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
     }
     // upgrade villige
     //sleep(1);
+    printf("first step\n");
     ai_upgrade( ai_find_village( arg ) , arg );
     // build village
     //sleep(1);
+    printf("second step\n");
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
     //sleep(1);
+    printf("third step\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
 }
 
@@ -243,10 +246,138 @@ int32_t ai_find_empty_road( Arg arg )
             }
         }
         // check road
-        if( ( ( arg.r+i )->dir1 != NULL && ( arg.r+i )->dir1->owner == who ) || 
-            ( ( arg.r+i )->dir2 != NULL && ( arg.r+i )->dir2->owner == who ) || 
-            ( ( arg.r+i )->dir3 != NULL && ( arg.r+i )->dir3->owner == who ) ||
-            ( ( arg.r+i )->dir4 != NULL && ( arg.r+i )->dir4->owner == who )  )
+        int32_t value1 = 0 , value2 = 0 , value3 = 0 , value4 = 0;
+        if( ( arg.r+i )->dir1 != NULL && ( arg.r+i )->dir1->owner == who )
+        {
+            value1 = 1;
+            if( (arg.r+i)->node1 == (arg.r+i)->dir1->node1)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node1 == (arg.r+i)->dir1->node2)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir1->node1)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir1->node2)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            
+        } 
+        if( ( arg.r+i )->dir2 != NULL && ( arg.r+i )->dir2->owner == who )
+        {
+            value2 = 1;
+            if( (arg.r+i)->node1 == (arg.r+i)->dir2->node1)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node1 == (arg.r+i)->dir2->node2)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir2->node1)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir2->node2)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+        } 
+        if( ( arg.r+i )->dir3 != NULL && ( arg.r+i )->dir3->owner == who )
+        {
+            value3 = 1;
+            if( (arg.r+i)->node1 == (arg.r+i)->dir3->node1)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node1 == (arg.r+i)->dir3->node2)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir3->node1)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir3->node2)
+            {;
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+        }
+        if( ( arg.r+i )->dir4 != NULL && ( arg.r+i )->dir4->owner == who )
+        {
+            value4 = 1;
+            if( (arg.r+i)->node1 == (arg.r+i)->dir4->node1)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node1 == (arg.r+i)->dir4->node2)
+            {
+                if( (arg.r+i)->node1->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir4->node1)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+            if( (arg.r+i)->node2 == (arg.r+i)->dir4->node2)
+            {
+                if( (arg.r+i)->node2->owner != who )
+                {
+                    value1 = 0;
+                }
+            }
+        }
+        
+        if( value1+value2+value3+value4 > 0 )
         {
             if( ( arg.r+i )->owner == 0 )
             {
@@ -351,7 +482,7 @@ int32_t ai_find_empty_node( Arg arg )
             //printf("this is end of ai find village\n");
             return num+1;
         }
-        if(num == 53) num = 0;
+        if(num == 53) num = -1;
     }
 }
 
@@ -367,7 +498,8 @@ int32_t ai_find_village( Arg arg )
     {
         if( (arg.n+i)->owner == who && (arg.n+i)->type == 1 )
         {
-            //printf("%d ",i+1);
+            printf("i = %d \n",i);
+            printf(" %d == %d \n",(arg.n+i)->owner , who );
             ava[i] = 1;
             count++;
         } 
@@ -389,7 +521,7 @@ int32_t ai_find_village( Arg arg )
             //printf("this is end of ai find village\n");
             return num+1;
         }
-        if(num == 53) num = 0;
+        if(num == 53) num = -1;
     }
 }
 
@@ -474,7 +606,7 @@ void ai_move_robber( int32_t where , Arg arg )
             }
         }
     }
-    //printf("this is the end of ai move robber.\n");
+    printf("this is the end of ai move robber.\n");
 }
 
 

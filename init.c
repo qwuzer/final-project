@@ -40,6 +40,103 @@ node *init_node( node *pnode )
 
     for( int i=1 ; i<=54 ; i++ ) //connect nodes
     {
+        // if( i == 25)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 29 );
+        //     tmp->dir2 = ( pnode + 37 );
+        //     tmp->dir3 = NULL;
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else if( i == 27)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 31 );
+        //     tmp->dir2 = ( pnode + 39 );
+        //     tmp->dir3 = ( pnode + 35 );
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else if( i == 39)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 48 );
+        //     tmp->dir2 = ( pnode + 56 );
+        //     tmp->dir3 = ( pnode + 52 );
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else if( i == 45)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 61 );
+        //     tmp->dir2 = ( pnode + 64 );
+        //     tmp->dir3 = ( pnode + 56 );
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else if( i == 46)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 57 );
+        //     tmp->dir2 = ( pnode + 65 );
+        //     tmp->dir3 = ( pnode + 61 );
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else if( i == 51)
+        // {
+        //     node *tmp=(pnode+i-1);
+        //     tmp->index = i;
+        //     tmp->type = 0;
+        //     tmp->owner = 0;
+        //     tmp->triangle_type = 1;
+            
+        //     tmp->dir1 = ( pnode + 68 );
+        //     tmp->dir2 = ( pnode + 70 );
+        //     tmp->dir3 = ( pnode + 65 );
+
+        //     tmp->tile1 = 0;
+        //     tmp->tile2 = 0;
+        //     tmp->tile3 = 0;
+        // }
+        // else 
         if( i == 1 || i == 3 || i == 7 )
         {
             node *tmp=(pnode+i-1);
