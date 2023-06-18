@@ -29,6 +29,8 @@ int32_t ai_find_empty_node( Arg arg );
 int32_t ai_find_village( Arg arg );
 void ai_move_robber( int32_t where , Arg arg );
 void ai_get_resource( int32_t dice_number , Arg arg );
+void count_longest_road( Player **pp , node *pn , road *pr );
+int32_t dfs( Arg arg , int who , int sum , int index );
 
 // for advance
 //public function

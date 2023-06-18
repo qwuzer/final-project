@@ -31,6 +31,154 @@ int32_t ai_find_empty_node( Arg arg );
 int32_t ai_find_village( Arg arg );
 void ai_move_robber( int32_t where , Arg arg );
 void ai_get_resource( int32_t dice_number , Arg arg );
+void count_longest_road( Player **pp , node *pn , road *pr );
+int32_t dfs( Arg arg , int who , int sum , int index );
+
+void count_longest_road( Player **pp , node *pn , road *pr )
+{
+    Arg arg;
+    arg.op=pp;
+    arg.n=pn;
+    arg.r=pr;
+    int max_i = 0;
+    int max_len = 2;
+    int max_o = -1;
+    for(int i=0;i<72;i++)
+    {
+        int t= dfs( arg , (arg.r+i)->owner , 0 , i );
+        if( t > max_len )
+        {
+            max_i = i;
+            max_len = t;
+            max_o = (arg.r+i)->owner-1;
+        }
+    }
+    arg.op[0]->longest_road = 0;
+    arg.op[1]->longest_road = 0;
+    arg.op[2]->longest_road = 0;
+    arg.op[3]->longest_road = 0;
+    arg.op[max_o]->longest_road = 1;
+}
+
+int u_n[54]={},u_r[72]={};
+int32_t dfs( Arg arg , int who , int sum , int index )
+{
+    int t1=sum,t2=sum,t3=sum,t4=sum;
+    u_r[index] = 1;
+    //dir1
+    if( (arg.r+index)->dir1 != NULL )
+    {
+        //dir1 node1
+        if( (arg.r+index)->dir1->node1 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir1->node1 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir1->node1->owner == 0 ||
+                (arg.r+index)->dir1->node1->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir1->index-1] == 0)
+                t1 = dfs( arg , who , sum+1 , (arg.r+index)->dir1->index-1 );
+            }
+        }
+        //dir1 node2
+        if( (arg.r+index)->dir1->node2 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir1->node2 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir1->node2->owner == 0 ||
+                (arg.r+index)->dir1->node2->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir1->index-1] == 0)
+                t1 = dfs( arg , who , sum+1 , (arg.r+index)->dir1->index-1 );
+            }
+        }
+    }
+    //dir2
+    if( (arg.r+index)->dir2 != NULL )
+    {
+        //dir2 node1
+        if( (arg.r+index)->dir2->node1 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir2->node1 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir2->node1->owner == 0 ||
+                (arg.r+index)->dir2->node1->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir2->index-1] == 0)
+                t2 = dfs( arg , who , sum+1 , (arg.r+index)->dir2->index-1 );
+            }
+        }
+        //dir2 node2
+        if( (arg.r+index)->dir2->node2 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir2->node2 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir2->node2->owner == 0 ||
+                (arg.r+index)->dir2->node2->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir2->index-1] == 0)
+                t2 = dfs( arg , who , sum+1 , (arg.r+index)->dir2->index-1 );
+            }
+        }
+    }
+    //dir3
+    if( (arg.r+index)->dir3 != NULL )
+    {
+        //dir3 node1
+        if( (arg.r+index)->dir3->node1 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir3->node1 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir3->node1->owner == 0 ||
+                (arg.r+index)->dir3->node1->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir3->index-1] == 0)
+                t3 = dfs( arg , who , sum+1 , (arg.r+index)->dir3->index-1 );
+            }
+        }
+        //dir3 node2
+        if( (arg.r+index)->dir3->node2 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir3->node2 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir3->node2->owner == 0 ||
+                (arg.r+index)->dir3->node2->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir3->index-1] == 0)
+                t3 = dfs( arg , who , sum+1 , (arg.r+index)->dir3->index-1 );
+            }
+        }
+    }
+    //dir4
+    if( (arg.r+index)->dir4 != NULL )
+    {
+        //dir4 node1
+        if( (arg.r+index)->dir4->node1 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir4->node1 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir4->node1->owner == 0 ||
+                (arg.r+index)->dir4->node1->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir4->index-1] == 0)
+                t4 = dfs( arg , who , sum+1 , (arg.r+index)->dir4->index-1 );
+            }
+        }
+        //dir1 node2
+        if( (arg.r+index)->dir4->node2 == (arg.r+index)->node1 ||
+            (arg.r+index)->dir4->node2 == (arg.r+index)->node2 )
+        {
+            if( (arg.r+index)->dir4->node2->owner == 0 ||
+                (arg.r+index)->dir4->node2->owner == who )
+            {
+                if(u_r[(arg.r+index)->dir4->index-1] == 0)
+                t4 = dfs( arg , who , sum+1 , (arg.r+index)->dir4->index-1 );
+            }
+        }
+    }
+
+    u_r[index] = 0;
+
+    return t1*(t1>t2&&t1>t3&&t1>t4) +
+           t1*(t2>t1&&t2>t3&&t2>t4) +
+           t1*(t3>t1&&t3>t2&&t3>t4) +
+           t1*(t4>t1&&t4>t2&&t4>t3) ; 
+
+    
+}
 
 // // for advance
 // //public function
