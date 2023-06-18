@@ -16,13 +16,13 @@ int32_t tile_type[19] = { 5 , 2 , 2 , 4 , 1 , 2 , 3 , 3 , 5 , 1 , 4 , 2 , 1 , 4 
 card *init_card( card *pcard )
 {
     int32_t tmp[26] = { -1 , 0, 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
-    //shuffle tmp
-    // for( int32_t i = 0 ; i < 25 ; i++ ){
-    //     int32_t j = rand() % 25;
-    //     int32_t tmp2 = tmp[i];
-    //     tmp[i] = tmp[j];
-    //     tmp[j] = tmp2;
-    // }
+   // shuffle tmp
+    for( int32_t i = 0 ; i < 25 ; i++ ){
+        int32_t j = rand() % 25;
+        int32_t tmp2 = tmp[i];
+        tmp[i] = tmp[j];
+        tmp[j] = tmp2;
+    }
     //init card
     for( int32_t i = 0 ; i < 25 ; i++ ){
        // if( i == 1 ) { pcard[i].timestamp = -9;}

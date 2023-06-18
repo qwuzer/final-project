@@ -83,9 +83,9 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
     sleep(3);
     printf("At the end maybe I can ...\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
-    sleep(3);
+     sleep(3);
     printf("That's all,next one~\n");
-    sleep(5);
+    sleep(3);
 }
 
 // void ai_advanced_pro_max_plus_ultra_turn()
@@ -153,6 +153,8 @@ void ai_set_village( int32_t where , Arg arg )
 {
     //printf("this is ai set viliage\n");
     // check resource
+    //print the resources
+    printf("I have %d brick, %d grain, %d sheep, %d lumber, %d ore.\n",arg.p->resource[1],arg.p->resource[2],arg.p->resource[3],arg.p->resource[4],arg.p->resource[5]);
     if( arg.p->resource[1] > 0 &&
         arg.p->resource[2] > 0 &&
         arg.p->resource[3] > 0 &&

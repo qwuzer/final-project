@@ -482,6 +482,7 @@ void print_all( Player ** player ){
 	printf( "    Score\n" );
     int32_t chkR = 0, longest_road_owner = 0, longest_road_num = 0, chkA = 0, largestAO = 0, largestAN = 0;
     for( int32_t i = 0; i < 4; i++ ){
+		printf(CLR_RST);
         if( player[i] -> longest_road ) {
             chkR = 1;
             longest_road_owner = i + 1;
@@ -496,7 +497,7 @@ void print_all( Player ** player ){
         printf("Player %d: "CLR_RST, i + 1);
 		if( player[i] -> longest_road && player[i] -> largest_army ) printf("%d\n", player[i] -> victory_point + 4) ; 
 		else if( player[i] -> longest_road || player[i] -> largest_army ) printf("%d\n", player[i] -> victory_point + 2 );
-		else printf("%d\n", victory_point );
+		else printf("%d\n", player[i] -> victory_point );
     }
 	if( chkR ){
 		check_owner( longest_road_owner );
