@@ -7,6 +7,7 @@
 
 typedef struct _arg
 {
+    Player **op;
     Player *p;
     tile *t;
     node *n;
@@ -18,7 +19,7 @@ int32_t roll_the_dice();
 
 // for basic
 //public function
-void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num );
+void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num );
 //private function
 void ai_set_road( int32_t where , Arg arg );
 void ai_set_village( int32_t where , Arg arg );

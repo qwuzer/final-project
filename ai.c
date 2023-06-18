@@ -2,9 +2,11 @@
 #include<stdint.h>
 #include<stdlib.h>
 #include<time.h>
+#include<unistd.h>
 #include"struct.h"
 #include"ai.h"
 
+#define HI printf("\nhi\n");
 
 // ai = "a" lot of "i"f-else 
 
@@ -19,7 +21,7 @@ int32_t roll_the_dice()
 
 // for basic
 //public function
-void ai_turn( Player *p , tile *t , node *n , road *r , int32_t index_num ); 
+void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num ); 
 //private function
 void ai_set_road( int32_t where , Arg arg );
 void ai_set_village( int32_t where , Arg arg );
@@ -43,15 +45,19 @@ void ai_get_resource( int32_t dice_number , Arg arg );
 // void ai_sort_resource();
 
 
-void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num )
+void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num )
 {
+    printf("-----------------------------------------hi,this is basic ai~\n");
     Arg arg;
-    arg.p = ptr_player;
+    arg.op = ptr_player;
+    arg.p = ptr_player[index_num-1];
     arg.t = ptr_tile;
     arg.n = ptr_node;
     arg.r = ptr_road;
-    arg.me = index_num;
+    arg.me = index_num-1;
     int32_t dice = roll_the_dice();
+    printf("\n the dice-number is %d.\n",dice);
+    sleep(1);
     // no buy card
     // no trade
     // random move robber
@@ -64,10 +70,13 @@ void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_r
         ai_get_resource( dice , arg );
     }
     // upgrade villige
+    sleep(1);
     ai_upgrade( ai_find_village( arg ) , arg );
     // build village
+    sleep(1);
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
+    sleep(1);
     ai_set_road( ai_find_empty_road( arg ) , arg );
 }
 
@@ -99,6 +108,7 @@ void ai_turn( Player *ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_r
 
 void ai_set_road( int32_t where , Arg arg )
 {
+    printf("this is ai set road`\n");
     // check resource
     if( arg.p->resource[1] > 0 &&
         arg.p->resource[4] > 0 )
@@ -133,6 +143,7 @@ void ai_set_road( int32_t where , Arg arg )
 
 void ai_set_village( int32_t where , Arg arg )
 {
+    printf("this is ai set viliage\n");
     // check resource
     if( arg.p->resource[1] > 0 &&
         arg.p->resource[2] > 0 &&
@@ -173,6 +184,7 @@ void ai_set_village( int32_t where , Arg arg )
 
 void ai_upgrade( int32_t where , Arg arg )
 {
+    printf("this is ai upgrade\n");
     // check resource
     if( arg.p->resource[2] > 1 &&
         arg.p->resource[5] > 2 )
@@ -207,6 +219,7 @@ void ai_upgrade( int32_t where , Arg arg )
 
 int32_t ai_find_empty_road( Arg arg )
 {
+    //printf("this is ai find empty road\n");
     int32_t who = arg.me;
     int32_t ava[72] = {};
 
@@ -250,26 +263,30 @@ int32_t ai_find_empty_road( Arg arg )
             break;
         }
     }
+    //printf("this is the end of find empty road\n");
     if( non == 1 )
     {
         return -1;
     }
 
     // random select one
-    while(1)
+    srand( time(NULL) );
+    int32_t num = rand()%54;
+    for(;;num++)
     {
-        srand( time(NULL) );
-        int32_t num = rand()%72;
         if( ava[num] == 1 )
-        {
+        {   
+            //printf("this is end of ai find village\n");
             return num+1;
         }
+        if(num == 71) num = 0;
     }
 
 }
 
 int32_t ai_find_empty_node( Arg arg )
 {
+    //printf("this is ai find empty node\n");
     int32_t who = arg.me;
     int32_t ava[54] = {};
 
@@ -310,25 +327,29 @@ int32_t ai_find_empty_node( Arg arg )
             break;
         }
     }
+    //printf("this is the end of find empty node\n");
     if( non == 1 )
     {
         return -1;
     }
 
     // random select one
-    while(1)
+    srand( time(NULL) );
+    int32_t num = rand()%54;
+    for(;;num++)
     {
-        srand( time(NULL) );
-        int32_t num = rand()%54;
         if( ava[num] == 1 )
-        {
+        {   
+            //printf("this is end of ai find village\n");
             return num+1;
         }
+        if(num == 53) num = 0;
     }
 }
 
 int32_t ai_find_village( Arg arg )
 {
+    //printf("this is ai find village.\n");
     int32_t who = arg.me;
     int32_t ava[54] = {};
     int32_t count = 0;
@@ -337,29 +358,34 @@ int32_t ai_find_village( Arg arg )
     {
         if( (arg.n+i)->owner == who && (arg.n+i)->type == 1 )
         {
-            ava[54] = 1;
+            ava[i] = 1;
             ++count;
         } 
     }
-
+    
     if( count == 0 )
     {
+        //printf("this is end of ai find village\n");
         return -1;
     }
+    
 
-    while(1)
+    srand( time(NULL) );
+    int32_t num = rand()%54;
+    for(;;num++)
     {
-        srand( time(NULL) );
-        int32_t num = rand()%54;
         if( ava[num] == 1 )
-        {
+        {   
+            //printf("this is end of ai find village\n");
             return num+1;
         }
+        if(num == 53) num = 0;
     }
 }
 
 void ai_move_robber( int32_t where , Arg arg )
 {
+    printf("this is ai move robber\n");
     srand( time(NULL) );
     int32_t target_tile = rand() % 19;
     if( where == -1 )
@@ -373,7 +399,6 @@ void ai_move_robber( int32_t where , Arg arg )
     {
         target_tile = where-1;
     }
-
     // find origin and move it
     int32_t origin = -1;
     for( int32_t i=0 ; i<19 ; ++i )
@@ -419,48 +444,71 @@ void ai_move_robber( int32_t where , Arg arg )
         srand( time(NULL) );
         for(int32_t i=0 ; i<list_num ; ++i )
         {
-            if( (arg.p + rob_list[i])->resource[1] +
-                (arg.p + rob_list[i])->resource[2] +
-                (arg.p + rob_list[i])->resource[3] +
-                (arg.p + rob_list[i])->resource[4] +
-                (arg.p + rob_list[i])->resource[5] != 0)
+            if( arg.op[rob_list[i]]->resource[1] +
+                arg.op[rob_list[i]]->resource[2] +
+                arg.op[rob_list[i]]->resource[3] +
+                arg.op[rob_list[i]]->resource[4] +
+                arg.op[rob_list[i]]->resource[5] != 0)
             {
                 int32_t j=1;
                 for( ; j<6 ; ++j)
                 {
-                    if((arg.p + rob_list[i])->resource[j] >0)
+                    if(arg.op[rob_list[i]]->resource[j] >0)
                     {
-                        (arg.p + rob_list[i])->resource[j] -= 1;
+                        arg.op[rob_list[i]]->resource[j] -= 1;
                         break;
                     }
                 }
-                (arg.p + who)->resource[j] += 1;
+                arg.p->resource[j] += 1;
                 break;
             }
         }
     }
+    //printf("this is the end of ai move robber.\n");
 }
 
 
 void ai_get_resource( int32_t dice_number , Arg arg )
 {
+    //printf("this is ai get resource \n");
     int32_t who = arg.me;
-    for( int32_t i=0 ; i<19 ; ++i )
+    //printf("I am %d\n",who);
+    for( int32_t i=0 ; i<19 ; i++ )
     {
+        // printf(" i = %d\n",i);
+
         if( ( arg.t+i )->dice_num == dice_number &&
             ( arg.t+i )->robber == 0 )
         {
-            for(int j=0;i<6;++j)
+
+            // printf("found tile\n");
+
+            for(int j=0;j<6;j++)
             {
-                if((arg.t+i)->nodes[6]->type == 1 )
+                // printf("node [%d] : %d ",j,(arg.t+i)->nodes[j]->index);
+
+                if((arg.t+i)->nodes[j]->type == 1 )
                 {
-                    (arg.p+((arg.t+i)->nodes[6]->owner))->resource[(arg.t+i)->resource_type] += 1;
+
+                    // printf(" node type = %d \n",(arg.t+i)->nodes[j]->type);
+                    // printf("arg.op[%d]->",(arg.t+i)->nodes[j]->owner);
+                    // printf("resource[%d]  ",(arg.t+i)->resource_type);
+                    // printf(" = %d + 1 ",arg.op[(arg.t+i)->nodes[j]->owner]->resource[(arg.t+i)->resource_type]);
+
+                    arg.op[(arg.t+i)->nodes[j]->owner]->resource[(arg.t+i)->resource_type] += 1;
+
                 }
-                if((arg.t+i)->nodes[6]->type == 2 )
+                if((arg.t+i)->nodes[j]->type == 2 )
                 {
-                    (arg.p+((arg.t+i)->nodes[6]->owner))->resource[(arg.t+i)->resource_type] += 1;
+                    arg.op[(arg.t+i)->nodes[j]->owner]->resource[(arg.t+i)->resource_type] += 1;
                 }
+
+                //printf("---------------------------\n");
             }
+
+            //printf("the end of found tile\n");
         }
+
     }
+    //printf("this is the end of ai get resource\n");
 }
