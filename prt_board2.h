@@ -64,5 +64,6 @@ void check_owner( int32_t owner );
 void print_tile( tile tile);
 void print_node( node node);
 void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer );
+void print_all( Player ** player );
 
 

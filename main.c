@@ -69,9 +69,10 @@ void obtain_resources( int32_t sum , Player *player , tile *ptile )
 int32_t is_game_over( Player *players[] )
 {
     int32_t i = 0;
+    print_all( players);
     for( i = 0 ; i < 4 ; i++ )
     {
-        printf("Player %d has %d points\n",players[i]->index,players[i]->victory_point);
+        //printf("Player %d has %d points\n",players[i]->index,players[i]->victory_point);
         if( players[i]->victory_point >= 10 )
         {
             return 1;
@@ -798,14 +799,15 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
         }
     }
 
-    for( int32_t i = 0 ; i < 54 ; i++ )
-    {
-        if( build_index[i] != 0 )
-        {
-            printf("%d ",i+1);
-        }
-    }
-    printf("\n");
+    // for( int32_t i = 0 ; i < 54 ; i++ )
+    // {
+    //     if( build_index[i] != 0 )
+    //     {
+    //         printf("%d ",i+1);
+    //     }
+    // }
+    // printf("\n");
+    prtNode( player , proad , pnode , build_index );
 
     printf("Select a place to build your settlement:\n");
     /*TODO*/
@@ -851,6 +853,7 @@ void build_city_func( Player *player , node *pnode , road *proad )
         }
     }
 
+    prtNode( player , proad , pnode , build_index);
     printf("Select a place to build your city:\n");
     /*TODO*/
     int32_t select = 0;
@@ -873,7 +876,7 @@ void build_city_func( Player *player , node *pnode , road *proad )
     //gain 2 victory point
     player->victory_point += 2;
 
-    //player->settlement_num -= 1; ??
+    player->settlement_num -= 1; 
 
     return;
 }
@@ -930,14 +933,15 @@ void build_road_func( Player *player , road *proad )
     }
 
 
-    for( int32_t i = 0 ; i < 72 ; i++ )
-    {
-        if( road_index[i] != 0 )
-        {
-            printf("%d ",i+1);
-        }
-    }
+    // for( int32_t i = 0 ; i < 72 ; i++ )
+    // {
+    //     if( road_index[i] != 0 )
+    //     {
+    //         printf("%d ",i+1);
+    //     }
+    // }
 
+    prtRoad( player , proad , road_index );
     printf("Select a place to build your road:\n");
     /*TODO*/
     int32_t select = 0;
@@ -1030,8 +1034,10 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
         {
             sum += player_start[i].resource[j];
         }
+        
         if( sum > 7 )
         {
+            printf("Player%d have a total of %d resources, so player%d will be taken %1.f resources\n",player_start[i].index,sum , player_start[i].index , (floor(sum / 2)));
             int32_t cnt = floor(sum / 2);
             for( int32_t j = 0 ; j < cnt ; j++ )
             {
@@ -1044,16 +1050,8 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
                 {
                     j--;
                 }
-                // char *resource_name[5] = {"Brick","Grain","Wool","Lumber","Ore"};
-                // for( int32_t i = 0 ; i < 5 ; i++ )
-                // {
-                //     if( player_start[i].resource[i] != 0 )
-                //     {
-                //         printf("You have %d %s\n",player_start[i].resource[i],resource_name[i-1]);
-                //         break;
-                //     }
-                // } 
             }
+
         }
     }
     moverobber:
@@ -1584,14 +1582,15 @@ void SetupBuildRoad( Player *player , road *proad )
     }
 
     //print the road that is available
-    for( int32_t i = 0 ; i < 72 ; i++ )
-    {
-        if( road_index[i] != 0 )
-        {
-            printf("%d ",i+1);
-        }
-    }
+    // for( int32_t i = 0 ; i < 72 ; i++ )
+    // {
+    //     if( road_index[i] != 0 )
+    //     {
+    //         printf("%d ",i+1);
+    //     }
+    // }
 
+    prtRoad( player, proad , road_index );
     build : printf("Select a place to build your road:\n");
     /*TODO*/
     int32_t select = 0;
@@ -1693,17 +1692,17 @@ int32_t SetupBuildSettlement( Player *player , road *proad , node *pnode )
     }
 
 
-    for( int32_t i = 0 ; i < 54 ; i++ )
-    {
-        if( build_index[i] != 0 )
-        {
-            printf("%d ",i+1);
-        }
-    }
-    printf("\n");
+    // for( int32_t i = 0 ; i < 54 ; i++ )
+    // {
+    //     if( build_index[i] != 0 )
+    //     {
+    //         printf("%d ",i+1);
+    //     }
+    // }
+    // printf("\n");
    
     
-    //prtNode( player , proad , pnode , build_index );
+    prtNode( player , proad , pnode , build_index );
 
    
     build_set :    
@@ -1804,7 +1803,7 @@ int main ()
 
 
     player[1]->resource[Brick] = 5;
-        player[1]->resource[Grain] = 5;
+    player[1]->resource[Grain] = 5;
     player[1]->resource[Sheep] = 5;
     player[1]->resource[Lumber] = 5;
     player[1]->resource[Ore] = 5;

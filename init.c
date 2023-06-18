@@ -173,7 +173,7 @@ node *init_node( node *pnode )
             tmp->triangle_type = 0;
             tmp->dir1 = ( pnode + i - 7 + (i==8||i==10||i==50) + (i==4)*3 );
             tmp->dir2 = ( pnode + i + 5 - (i==4||i==44||i==46) - (i==50)*3 );
-            tmp->dir3 = ( pnode + i - 1 );
+            tmp->dir3 = ( pnode + i - 2 );
             tmp->tile1 = 0;
             tmp->tile2 = 0;
             tmp->tile3 = 0;
