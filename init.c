@@ -888,8 +888,8 @@ road *init_road( road *proad , node *pnode )
         else if(i==32) { tmp->node1 = ( pnode + 21 ); tmp->node2 = ( pnode + 27); }
         else if(i==33) { tmp->node1 = ( pnode + 22 ); tmp->node2 = ( pnode + 28); }
         else if(i==34) { tmp->node1 = ( pnode + 23 ); tmp->node2 = ( pnode + 29); }
-        else if(i==35) { tmp->node1 = ( pnode + 24 ); tmp->node2 = ( pnode + 25); }//50%
-        else if(i==36) { tmp->node1 = ( pnode + 26 ); tmp->node2 = ( pnode + 27); }
+        else if(i==35) { tmp->node1 = ( pnode + 25 ); tmp->node2 = ( pnode + 26); }//50%
+        else if(i==36) { tmp->node1 = ( pnode + 27 ); tmp->node2 = ( pnode + 28); }
         else if(i==37) { tmp->node1 = ( pnode + 24 ); tmp->node2 = ( pnode + 30); }
         else if(i==38) { tmp->node1 = ( pnode + 25 ); tmp->node2 = ( pnode + 31); }
         else if(i==39) { tmp->node1 = ( pnode + 26 ); tmp->node2 = ( pnode + 32); }
