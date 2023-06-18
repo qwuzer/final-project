@@ -347,4 +347,29 @@ void prtRoad( Player * player, road * proad, int32_t road_index[72] ){
 	//clear();
 }
 
-
+void prtTile() {
+	printf("\033[2J\033[H");
+    printf("              B   *---*   W   \n");
+    printf("             / \\ /     \\ / \\ \n");
+    printf("            *---*  01   *---*\n");
+    printf("           /     \\     /     \\ \n");
+    printf("  ? --*---*  02   *---*  12   *---*-- ?\n");
+    printf("   \\ /     \\     /     \\     /     \\ /\n");
+    printf("    *  03   *---*  13   *---*  11   *\n");
+    printf("     \\     /     \\     /     \\     /\n");
+    printf("      *---*  14   *---*  18   *---*\n");
+    printf("     /     \\     /     \\     /     \\ \n");
+    printf("    *  04   *---*  19   *---*  10   *\n");
+    printf("   / \\     /     \\     /     \\     / \\ \n");
+    printf("  ? --*---*  15   *---*  17   *---*-- R\n");
+    printf("     /     \\     /     \\     /     \\ \n");
+    printf("    *  05   *---*  16   *---*  09   *\n");
+    printf("     \\     /     \\     /     \\     /\n");
+    printf("      *---*  06   *---*  08   *---*\n");
+    printf("         / \\     /     \\     / \\ \n");
+    printf("        F --*---*  07   *---*-- S\n");
+    printf("                 \\     /   \n");
+    printf("                  *---*\n");
+    printf("                   \\ /   \n");
+    printf("                    ?\n");
+}
