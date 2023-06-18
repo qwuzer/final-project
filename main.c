@@ -16,7 +16,7 @@ int32_t roll_dice( Player *player )
     int32_t dice2 = rand() % 6 + 1;
     int32_t sum = dice1 + dice2;
    // printf("Player %d rolled a value of %d\n",player->index,sum);
-   sum = 7;
+   //sum = 7;
     return sum;
 }
 
@@ -1008,9 +1008,9 @@ void buy_dev_card_func( Player *player , card *pcard , int32_t timestamp  )
                 {
                     player->dev_card[j].type = pcard[i].type;
                     player->dev_card[j].timestamp = timestamp;
-                    printf("timestamp : %d\n",timestamp);
-                    printf("player->dev_card[i].type = %d\n",player->dev_card[j].type);
-                    printf("hi");
+                    // printf("timestamp : %d\n",timestamp);
+                    // printf("player->dev_card[i].type = %d\n",player->dev_card[j].type);
+                    // printf("hi");
                     break;
                 }
             }
@@ -2022,18 +2022,18 @@ int main ()
                 }
                 break;
             case 2:
-                print_board( pTile, pNode, pRoad , player[0] );
+                print_board( pTile, pNode, pRoad , player[1] );
                 printf( "Player 2's turn\n" );
                 quit = 0;
                 devUsage = 1;//1 means dev card can be used
                 dice_val = roll_dice( player[1]);
                 if( dice_val == 7 ) {
-                    printf("Player 1 rolled a 7\n");
-                    moveRobber( pTile , player[0] , player);
+                    printf("Player 2 rolled a 7\n");
+                    moveRobber( pTile , player[1] , player);
                     print_board( pTile, pNode, pRoad , player[1] );
                 } else {
                     obtain_resources( dice_val , player[0] , pTile );
-                    print_player_resource(player[1]);
+                    //print_player_resource(player[1]);
                     while( is_able_to( player[1] , turn , pCard ,pRoad , pNode ,  &tmp_marine_option , option) && !quit )
                     {
                         int32_t c = print_option_menu( option , 8 );
