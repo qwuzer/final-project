@@ -412,7 +412,8 @@ int32_t chk_settlement_func( Player *player , road *proad , node *pnode)
     {
         node *tmp1 = (proad + i)->node1;
         node *tmp2 = (proad + i)->node2;
-
+        if( (proad + i)->owner == player->index)
+        {
         int32_t chk_3_dir = 1;//check if the 3 directioins has a building
         if( tmp1->dir1 != NULL )
         {
@@ -468,7 +469,7 @@ int32_t chk_settlement_func( Player *player , road *proad , node *pnode)
         {
             build_index[(tmp2->index)-1] = 1;
         }
-
+        }
     }
 
     //if the node is already occupied, set the index to 0
@@ -732,6 +733,8 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
         node *tmp1 = (proad + i)->node1;
         node *tmp2 = (proad + i)->node2;
 
+        if( (proad + i)->owner == player->index )
+        {
         int32_t chk_3_dir = 1;//check if the 3 directioins has a building
         if( tmp1->dir1 != NULL )
         {
@@ -787,7 +790,7 @@ void build_settlement_func( Player *player , road *proad , node *pnode)
         {
             build_index[(tmp2->index)-1] = 1;
         }
-
+        }
     }
 
     //if the node is already occupied, set the index to 0
@@ -2026,7 +2029,7 @@ int main ()
                 if( dice_val == 7 ) {
                     printf("Player 1 rolled a 7\n");
                     moveRobber( pTile , player[0] , player[0]);
-                    print_board( pTile, pNode, pRoad , player[0] );
+                    print_board( pTile, pNode, pRoad , player[1] );
                 } else {
                     obtain_resources( dice_val , player[0] , pTile );
                     print_player_resource(player[1]);
@@ -2053,13 +2056,13 @@ int main ()
                         switch( choice )
                         {
                             case 1: 
-                                print_board( pTile, pNode, pRoad , player[0]);
+                                print_board( pTile, pNode, pRoad , player[1]);
                                 buy_dev_card_func( player[1] , pCard , turn);
-                                print_board( pTile, pNode, pRoad , player[0]);
+                                print_board( pTile, pNode, pRoad , player[1]);
                                 break;
                             case 2:
                                 use_dev_card_func( player[1] , player[0] , player[2] , player[3] , pRoad ,pNode, pTile , player[0] );
-                                print_board( pTile, pNode, pRoad , player[0]);
+                                print_board( pTile, pNode, pRoad , player[1]);
                                 devUsage++;//update turn
                                 break;
                             case 3:
@@ -2070,15 +2073,15 @@ int main ()
                                 break;
                             case 5:
                                 build_settlement_func( player[1] , pRoad , pNode );
-                                print_board( pTile, pNode, pRoad , player[0]);
+                                print_board( pTile, pNode, pRoad , player[1]);
                                 break;
                             case 6:
                                 build_road_func( player[1]  , pRoad );
-                                print_board( pTile, pNode, pRoad , player[0]);
+                                print_board( pTile, pNode, pRoad , player[1]);
                                 break;
                             case 7:
                                 build_city_func( player[1] , pNode , pRoad );
-                                print_board( pTile, pNode, pRoad, player[0]);
+                                print_board( pTile, pNode, pRoad, player[1]);
                                 break;
                             case 8:
                                 quit = 1;
@@ -2095,6 +2098,7 @@ int main ()
                 }
                 break;
             case 3:
+                print_board( pTile, pNode, pRoad , player[2] );
                 printf( "Player 3's turn\n" );
                 quit = 0;
                 devUsage = 1;//1 means dev card can be used
@@ -2122,13 +2126,13 @@ int main ()
                     switch( choice )
                     {
                         case 1: 
-                            print_board( pTile, pNode, pRoad , player[0]);
+                            print_board( pTile, pNode, pRoad , player[2]);
                             buy_dev_card_func( player[2] , pCard , turn );
-                            print_board( pTile, pNode, pRoad , player[0]);
+                            print_board( pTile, pNode, pRoad , player[2]);
                             break;
                         case 2:
                             use_dev_card_func( player[2] , player[0] , player[1] , player[3] , pRoad , pNode ,pTile , player[0] );
-                            print_board( pTile, pNode, pRoad, player[0]);
+                            print_board( pTile, pNode, pRoad, player[2]);
                             devUsage++;//update turn
                             break;
                         case 3:
@@ -2139,15 +2143,15 @@ int main ()
                             break;
                         case 5:
                             build_settlement_func( player[2] , pRoad , pNode );
-                            print_board( pTile, pNode, pRoad, player[0] );
+                            print_board( pTile, pNode, pRoad, player[2] );
                             break;
                         case 6:
                             build_road_func( player[2]  , pRoad );
-                            print_board( pTile, pNode, pRoad ,player[0]);
+                            print_board( pTile, pNode, pRoad ,player[2]);
                             break;
                         case 7:
                             build_city_func( player[2] , pNode , pRoad );
-                            print_board( pTile, pNode, pRoad, player[0] );
+                            print_board( pTile, pNode, pRoad, player[2] );
                             break;
                         case 8:
                             quit = 1;
@@ -2163,6 +2167,7 @@ int main ()
                 free( tmp_marine_option);
                 break;
             case 4:
+                print_board( pTile, pNode, pRoad , player[3] );
                 printf( "Player 4's turn\n" );
                 quit = 0;
                 devUsage = 1;//1 means dev card can be used
@@ -2191,13 +2196,13 @@ int main ()
                     switch( choice )
                     {
                         case 1: 
-                            print_board( pTile, pNode, pRoad , player[0]);
+                            print_board( pTile, pNode, pRoad , player[3]);
                             buy_dev_card_func( player[3] , pCard , turn);
-                            print_board( pTile, pNode, pRoad , player[0]);
+                            print_board( pTile, pNode, pRoad , player[3]);
                             break;
                         case 2:
                             use_dev_card_func( player[3] , player[0] , player[1] , player[2] , pRoad , pNode , pTile , player[0] );
-                            print_board( pTile, pNode, pRoad ,player[0]);
+                            print_board( pTile, pNode, pRoad ,player[3]);
                             devUsage++;//update turn
                             break;
                         case 3:
@@ -2208,15 +2213,15 @@ int main ()
                             break;
                         case 5:
                             build_settlement_func( player[3] , pRoad , pNode );
-                            print_board( pTile, pNode, pRoad, player[0] );
+                            print_board( pTile, pNode, pRoad, player[3] );
                             break;
                         case 6:
                             build_road_func( player[3]  , pRoad );
-                            print_board( pTile, pNode, pRoad ,player[0]);
+                            print_board( pTile, pNode, pRoad ,player[3]);
                             break;
                         case 7:
                             build_city_func( player[3] , pNode , pRoad );
-                            print_board( pTile, pNode, pRoad , player[0]);
+                            print_board( pTile, pNode, pRoad , player[3]);
                             break;
                         case 8:
                             quit = 1;
