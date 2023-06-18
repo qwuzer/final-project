@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "struct.h"
 #include "init.h"
 #include "color.h"
@@ -24,9 +25,9 @@ void largest_army( Player *player[] , road *proad  )
     for(int32_t i = 0 ; i < 4 ; i++ )
     {
         int32_t max = 0;
-        if( player[i]->knight > max )
+        if( player[i]->knight_num > max )
         {
-            max = player[i]->knight;
+            max = player[i]->knight_num;
         }
     }
     //set the player's largest army to 1 if it has the largest knight number
@@ -610,7 +611,7 @@ int32_t is_able_to( Player *player , int32_t devUsage , card *pcard , road *proa
         printf("dev_card_num = %d\n",player->dev_card_num);
         for(int32_t i = 0 ; i < 25 ; i++ )
         {
-           // printf("%d %d\n",player->dev_card[i].type,player->dev_card[i].timestamp);
+            printf("%d %d\n",player->dev_card[i].type,player->dev_card[i].timestamp);
             // if( pcard[i].timestamp != devUsage && pcard[i].type != -1)
             // {
             //     option[use_dev_card] = 1;
@@ -993,12 +994,15 @@ void buy_dev_card_func( Player *player , card *pcard , int32_t timestamp  )
             print_dev_card( pcard[i].type );
             //player->dev_card[pcard[i].type] += 1; 
             //update player's dev card
-            for( int32_t i = 0 ; i < 25 ; i++ )
+            for( int32_t j = 0 ; j < 25 ; j++ )
             {
-                if( player->dev_card[i].type == Card_Empty )
+                if( player->dev_card[j].type == Card_Empty )
                 {
-                    player->dev_card[i].type = pcard[i].type;
-                    player->dev_card[i].timestamp = pcard[i].timestamp;
+                    player->dev_card[j].type = pcard[i].type;
+                    player->dev_card[j].timestamp = timestamp;
+                    printf("timestamp : %d\n",timestamp);
+                    printf("player->dev_card[i].type = %d\n",player->dev_card[j].type);
+                    printf("hi");
                     break;
                 }
             }
@@ -1018,6 +1022,40 @@ void buy_dev_card_func( Player *player , card *pcard , int32_t timestamp  )
 
 void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player is the one who moves the robber, player_start is for the reference of all players
 {
+    //player with more than 7 cards will lose half of the cards
+    for( int32_t i = 0 ; i < 4 ; i++ )
+    {
+        int32_t sum = 0;
+        for( int32_t j = 1 ; j < 5 ; j++ )
+        {
+            sum += player_start[i].resource[j];
+        }
+        if( sum > 7 )
+        {
+            int32_t cnt = floor(sum / 2);
+            for( int32_t j = 0 ; j < cnt ; j++ )
+            {
+                int32_t index = rand() % 5 + 1;
+                if( player_start[i].resource[index] != 0 )
+                {
+                    player_start[i].resource[index] -= 1;
+                }
+                else
+                {
+                    j--;
+                }
+                // char *resource_name[5] = {"Brick","Grain","Wool","Lumber","Ore"};
+                // for( int32_t i = 0 ; i < 5 ; i++ )
+                // {
+                //     if( player_start[i].resource[i] != 0 )
+                //     {
+                //         printf("You have %d %s\n",player_start[i].resource[i],resource_name[i-1]);
+                //         break;
+                //     }
+                // } 
+            }
+        }
+    }
     moverobber:
     printf("Select a tile to place the robber:\n");
     /*TODO*/
@@ -1042,8 +1080,7 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
     
     (ptile + (select - 1))->robber = 1;
 
-    //player with more than 7 cards will lose half of the cards
-
+   
     //steal a resource from a player if there are any
     int32_t steal_index[6] = {0};
 
@@ -1767,6 +1804,10 @@ int main ()
 
 
     player[1]->resource[Brick] = 5;
+        player[1]->resource[Grain] = 5;
+    player[1]->resource[Sheep] = 5;
+    player[1]->resource[Lumber] = 5;
+    player[1]->resource[Ore] = 5;
 
     int32_t settlement_index = 0;
 /*init*/
@@ -1881,7 +1922,7 @@ int main ()
     //             }
     //             free( tmp_marine_option);
 /*test*/
-    int32_t turn = 0;
+    int32_t turn = 4;
     
     while( 1 ) 
     {
