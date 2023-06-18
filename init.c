@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include "struct.h"
 #include "init.h"
+#include <time.h>
 
 //int32_t card[25] = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 1 , 1 , 1 , 1 , 1 , 2 , 2 , 3 , 3 , 4 , 4 };
 
@@ -438,15 +439,33 @@ node *init_node( node *pnode )
 tile *init_tile( tile *ptile ,  node *pnode )
 {
    // tile *ptile=calloc(19,sizeof(tile));
+	printf("1: noob, 2: pro\n");
+	int32_t c = 0;
+	scanf("%d", &c );
+	if( c == 2 ){
+		srand( time( NULL ) );
+		for( int32_t i = 0; i < 1000; i++ ){
+			int32_t tmp = 0;
+			int32_t a = 0, b = 0;
+			a = rand() % 19;
+			b = rand() % 19;
+			tmp = tile_type[a];
+			tile_type[a] = tile_type[b];
+			tile_type[b] = tmp;
+		}
+	}
+	//tile tmp;
+	int32_t k = 0;
     for(int i=0;i<19;++i)
     {
         tile tmp;
         tmp.index=i+1;
         tmp.resource_type = tile_type[i];
-        tmp.robber= 0 + (i==18); //if i=18 means it's dessert, so put the robber
-        if( i!=18 ) 
+        tmp.robber= 0 + (tile_type[i] == 6); //if i=18 means it's dessert, so put the robber
+        if( tile_type[i] != 6 ) 
         {
-            tmp.dice_num=tile_dice_num[i];
+            tmp.dice_num=tile_dice_num[k];
+			k++;
         }
         else
         {
