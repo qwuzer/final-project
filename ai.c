@@ -70,15 +70,15 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
         ai_get_resource( dice , arg );
     }
     // upgrade villige
-    sleep(1);
+    sleep(3);
     printf("first step\n");
     ai_upgrade( ai_find_village( arg ) , arg );
     // build village
-    sleep(1);
+    sleep(3);
     printf("second step\n");
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
-    sleep(1);
+    sleep(3);
     printf("third step\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
 }
@@ -498,8 +498,8 @@ int32_t ai_find_village( Arg arg )
     {
         if( (arg.n+i)->owner == who && (arg.n+i)->type == 1 )
         {
-            printf("i = %d \n",i);
-            printf(" %d == %d \n",(arg.n+i)->owner , who );
+            // printf("i = %d \n",i);
+            // printf(" %d == %d \n",(arg.n+i)->owner , who );
             ava[i] = 1;
             count++;
         } 
