@@ -70,15 +70,15 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
         ai_get_resource( dice , arg );
     }
     // upgrade villige
-    //sleep(1);
+    sleep(1);
     printf("first step\n");
     ai_upgrade( ai_find_village( arg ) , arg );
     // build village
-    //sleep(1);
+    sleep(1);
     printf("second step\n");
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
-    //sleep(1);
+    sleep(1);
     printf("third step\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
 }
@@ -528,6 +528,32 @@ int32_t ai_find_village( Arg arg )
 void ai_move_robber( int32_t where , Arg arg )
 {
     printf("this is ai move robber\n");
+
+    // cut in half
+    for(int32_t i=0 ; i<4 ;++i)
+    {
+        int re_sum = 0;
+        for(int j=1;j<6;j++)
+        {
+            re_sum += arg.op[i]->resource[j];
+        }
+        if( re_sum >= 8 )
+        {
+            int32_t half_sum = re_sum/2;
+            while(re_sum>half_sum)
+            {
+                int temp_i = rand()%5+1;
+                if( arg.op[i]->resource[temp_i] > 0 )
+                {
+                    arg.op[i]->resource[temp_i] -= 1;
+                    re_sum -= 1;
+                }
+            }
+        }
+    }
+
+
+
     srand( time(NULL) );
     int32_t target_tile = rand() % 19;
     if( where == -1 )
