@@ -104,7 +104,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[3] );//printf("*");
 	print_tile( pTile[0] );
-	printf("% 4d", 1);
+	printf("% 4d", pTile[0].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[4] );//printf("*");
 	check_owner( pRoad[4].owner );
@@ -135,14 +135,14 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[7] );//printf("*");
 	print_tile( pTile[1] );
-	printf("% 4d", 2);
+	printf("% 4d", pTile[1].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[8] );//printf("*");
 	check_owner( pRoad[10].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[9] );//printf("*");
 	print_tile( pTile[11] );
-	printf("% 4d", 12);
+	printf("% 4d", pTile[11].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[10] );//printf("*");
 	check_owner( pRoad[11].owner );
@@ -177,21 +177,21 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
     printf("    ");
 	print_node( pNode[12] );//printf("*");
 	print_tile( pTile[2] );
-	printf("% 4d", 3);
+	printf("% 4d", pTile[2].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[13] );//printf("*");
 	check_owner( pRoad[18].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[14] );//printf("*");
 	print_tile( pTile[12] );
-	printf("% 4d", 13);
+	printf("% 4d", pTile[12].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[15] );//printf("*");
 	check_owner( pRoad[19].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[16] );//printf("*");
 	print_tile( pTile[10] );
-	printf("% 4d", 11);
+	printf("% 4d", pTile[10].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[17] );//printf("*");
 	printf("	    ");printf(CLR_24_BG(104,34,139));printf("  "CLR_RST": This is robber!\n");
@@ -227,14 +227,14 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[19] );//printf("*");
 	print_tile( pTile[13] );
-	printf("% 4d", 14);
+	printf("% 4d", pTile[13].dice_num);
 	printf("   "CLR_RST);
 	print_node( pNode[20] );//printf("*");
 	check_owner( pRoad[27].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[21] );//printf("*");
 	print_tile( pTile[17] );
-	printf("% 4d   "CLR_RST, 18);
+	printf("% 4d   "CLR_RST, pTile[17].dice_num);
 	print_node( pNode[22] );//printf("*");
 	check_owner( pRoad[28].owner );
 	printf("---"CLR_RST);
@@ -269,19 +269,19 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("    ");
 	print_node( pNode[24] );//printf("*");
 	print_tile( pTile[3] );
-	printf("% 4d   "CLR_RST, 4);
+	printf("% 4d   "CLR_RST, pTile[3].dice_num);
 	print_node( pNode[25] );//printf("*");
 	check_owner( pRoad[35].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[26] );//printf("*");
 	print_tile( pTile[18] );
-	printf("% 4d   "CLR_RST, 19);
+	printf("% 4d   "CLR_RST, pTile[18].dice_num);
 	print_node( pNode[27] );//printf("*");
 	check_owner( pRoad[36].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[28] );//printf("*");
 	print_tile( pTile[9] );
-	printf("% 4d   "CLR_RST, 10);
+	printf("% 4d   "CLR_RST, pTile[9].dice_num);
 	print_node( pNode[29] );//printf("*");
 	printf("       ");printf("|      Resources     |\n");
 	//printf("\n");
@@ -310,7 +310,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	check_owner( pRoad[42].owner );
 	printf("/"CLR_RST);
 	printf(" \\ ");
-	printf("     ");printf("| 	Brick:       %d   |\n", pPlayer->resource[1] );
+	printf("     ");printf("| ");printf(CLR_24_BG(208,102,51));printf("	"CLR_RST"Brick:       %d   |\n", pPlayer->resource[1] );
 	////the code above is for line 12-------------------------
     printf("  ?---");
 	print_node( pNode[30] );//printf("*");
@@ -318,19 +318,19 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[31] );//printf("*");
 	print_tile( pTile[14] );
-	printf("% 4d   "CLR_RST, 15);
+	printf("% 4d   "CLR_RST, pTile[14].dice_num);
 	print_node( pNode[32] );//printf("*");
 	check_owner( pRoad[44].owner );	
 	printf("---"CLR_RST);
 	print_node( pNode[33] );//printf("*");
 	print_tile( pTile[16] );
-	printf("% 4d   "CLR_RST, 17);
+	printf("% 4d   "CLR_RST, pTile[16].dice_num);
 	print_node( pNode[34] );//printf("*");
 	check_owner( pRoad[45].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[35] );//printf("*");
 	printf("---G");
-	printf("     ");printf("|   Grain:       %d   |\n", pPlayer->resource[2] );
+	printf("     ");printf("| ");printf( CLR_24_BG( 105, 139, 34 ) );printf("  "CLR_RST"Grain:       %d   |\n", pPlayer->resource[2] );
 	////the code above is for line 13-------------------------
     printf("     ");
 	check_owner( pRoad[46].owner );
@@ -355,27 +355,27 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[51].owner );
 	printf("\\"CLR_RST" ");
-	printf("       ");printf("|   Sheep:       %d   |\n", pPlayer->resource[3] );
+	printf("       ");printf("| ");printf(CLR_24_BG(139, 139, 0));printf("  "CLR_RST"Sheep:       %d   |\n", pPlayer->resource[3] );
 	////the code above is for line 14-------------------------
     printf("    ");
 	print_node( pNode[36] );//printf("*");
 	print_tile( pTile[4] );
-	printf("% 4d   "CLR_RST, 5);
+	printf("% 4d   "CLR_RST, pTile[4].dice_num);
 	print_node( pNode[37] );//printf("*");
 	check_owner( pRoad[52].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[38] );//printf("*");
 	print_tile( pTile[15] );
-	printf("% 4d   "CLR_RST, 16);
+	printf("% 4d   "CLR_RST, pTile[15].dice_num);
 	print_node( pNode[39] );//printf("*");
 	check_owner( pRoad[53].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[40] );//printf("*");
 	print_tile( pTile[8] );
-	printf("% 4d   "CLR_RST, 9);
+	printf("% 4d   "CLR_RST, pTile[8].dice_num);
 	print_node( pNode[41] );//printf("*");
 	//printf("\n");
-	printf("       ");printf("|   Lumber:      %d   |\n", pPlayer->resource[4] );
+	printf("       ");printf("| ");printf( CLR_24_BG( 34, 139, 34 ) );printf("  "CLR_RST"Lumber:      %d   |\n", pPlayer->resource[4] );
 	////the code above is for line 15-------------------------
     printf("     ");
 	check_owner( pRoad[54].owner );	
@@ -400,7 +400,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[59].owner );
 	printf("/"CLR_RST);
-	printf("        ");printf("|   Ore:         %d   |\n", pPlayer->resource[5] );
+	printf("        ");printf("| ");printf( CLR_24_BG( 131, 139, 131 ) );printf("  "CLR_RST"Ore:         %d   |\n", pPlayer->resource[5] );
 	////the code above is for line 16-------------------------
     printf("      ");
 	print_node( pNode[42] );//printf("*");
@@ -408,13 +408,13 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[43] );//printf("*");
 	print_tile( pTile[5] );
-	printf("% 4d   "CLR_RST, 6);
+	printf("% 4d   "CLR_RST, pTile[5].dice_num);
 	print_node( pNode[44] );//printf("*");
 	check_owner( pRoad[61].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[45] );//printf("*");
 	print_tile( pTile[7] );
-	printf("% 4d   "CLR_RST, 8);
+	printf("% 4d   "CLR_RST, pTile[7].dice_num);
 	print_node( pNode[46] );//printf("*");
 	check_owner( pRoad[62].owner );
 	printf("---"CLR_RST);
@@ -437,7 +437,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[66].owner );
 	printf("/"CLR_RST" \\ ");
-	printf("           ");printf("|    Construction    |\n");
+	printf("           ");printf("|    Achievements    |\n");
 	////the code above is for line 18-------------------------
     printf("        S---");
 	print_node( pNode[48] );//printf("*");
@@ -445,7 +445,7 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("---"CLR_RST);
 	print_node( pNode[49] );//printf("*");
 	print_tile( pTile[6] );
-	printf("% 4d   "CLR_RST, 7);
+	printf("% 4d   "CLR_RST, pTile[6].dice_num);
 	print_node( pNode[50] );//printf("*");
 	check_owner( pRoad[68].owner );
 	printf("---"CLR_RST);
@@ -459,21 +459,48 @@ void print_board( tile * pTile, node * pNode, road * pRoad, Player * pPlayer ) {
 	printf("     "CLR_RST);
 	check_owner( pRoad[70].owner );
 	printf("/"CLR_RST);
-	printf("    ");printf("                ");printf("|   Settlement:  %d   |\n", pPlayer->settlement_num );
-	////the code above is for line 20-------------------------
-    printf("                  ");
+	printf("    ");printf("                ");printf("|   Knight:      %d   |\n", pPlayer->knight_num );
+	////the code above is for line 20-------------------------printf("+--------------------+\n");
+	printf("                  ");
 	print_node( pNode[52] );//printf("*");
 	check_owner( pRoad[71].owner );
 	printf("---"CLR_RST);
 	print_node( pNode[53] );//printf("*");
 	//printf("\n");
-	printf("                     ");printf("|   City:        %d   |\n", pPlayer->city_num );
+	printf("                     ");printf("+--------------------+\n");	
 	////the code above is for line 21-------------------------
-    printf("                   \\ /   ");
-	printf("                   ");printf("|   Knight:      %d   |\n", pPlayer->knight_num );
+    printf("                   \\ /   \n");
+	//printf("                   ");printf("|   Knight:      %d   |\n", pPlayer->knight_num );
 	////the code above is for line 22-------------------------
-    printf("                    ?");
-	printf("                       ");printf("+--------------------+\n");
+    printf("                    ?\n");
+	//printf("                       ");printf("+--------------------+\n");
 	////the code above is for line 23-------------------------
 }
 
+void print_all( Player ** player ){
+    //TODO: prt alls score
+	printf( "    Score\n" );
+    int32_t chkR = 0, longest_road_owner = 0, longest_road_num = 0, chkA = 0, largestAO = 0, largestAN = 0;
+    for( int32_t i = 0; i < 4; i++ ){
+        if( player[i] -> longest_road ) {
+            chkR = 1;
+            longest_road_owner = i + 1;
+            longest_road_num = player[i] -> road_num;
+        }
+        if( player[i] -> largest_army ){
+            chkA = 1;
+            largestAO = i + 1;
+            largestAN = player[i] -> knight_num;
+        }
+		check_owner( player[i] -> index );
+        printf("Player %d: "CLR_RST"%d\n", i + 1, player[i] -> victory_point ); 
+    }
+	if( chkR ){
+		check_owner( longest_road_owner );
+		printf("Player %d"CLR_RST" has longest road: %d\n", longest_road_owner, longest_road_num );
+	}
+	if( chkA ){
+		check_owner( largestAO );
+		printf("Player %d"CLR_RST" has largest army: %d\n", largestAO, largestAN );
+	}
+}
