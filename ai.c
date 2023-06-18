@@ -47,7 +47,7 @@ void ai_get_resource( int32_t dice_number , Arg arg );
 
 void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_road , int32_t index_num )
 {
-    printf("-----------------------------------------hi,this is basic ai [%d]\n",index_num );
+    printf("Hi, this is player %d :D\n",index_num );
     Arg arg;
     arg.op = ptr_player;
     arg.p = ptr_player[index_num-1];
@@ -56,13 +56,14 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
     arg.r = ptr_road;
     arg.me = index_num;
     int32_t dice = roll_the_dice();
-    printf("\n the dice-number is %d.\n",dice);
+    printf("I roll the dice and get %d.\n",dice);
     sleep(1);
     // no buy card
     // no trade
     // random move robber
     if( dice == 7 )
     {
+        printf("Oh, it's 7.");
         ai_move_robber( -1 , arg ); 
     }
     else
@@ -70,17 +71,18 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
         ai_get_resource( dice , arg );
     }
     // upgrade villige
-    sleep(3);
-    printf("first step\n");
+    sleep(1);
+    printf("I think maybe I can ...\n");
     ai_upgrade( ai_find_village( arg ) , arg );
     // build village
     sleep(3);
-    printf("second step\n");
+    printf("And then I can ...\n");
     ai_set_village( ai_find_empty_node( arg ) , arg );
     // bulid road 
     sleep(3);
-    printf("third step\n");
+    printf("At the end maybe I can ...\n");
     ai_set_road( ai_find_empty_road( arg ) , arg );
+    sleep(3);
 }
 
 // void ai_advanced_pro_max_plus_ultra_turn()
@@ -111,7 +113,7 @@ void ai_turn( Player **ptr_player , tile *ptr_tile , node *ptr_node , road *ptr_
 
 void ai_set_road( int32_t where , Arg arg )
 {
-    printf("this is ai set road`\n");
+    //printf("this is ai set road`\n");
     // check resource
     if( arg.p->resource[1] > 0 &&
         arg.p->resource[4] > 0 )
@@ -120,7 +122,7 @@ void ai_set_road( int32_t where , Arg arg )
         if( where!=-1 && arg.p->road_num<15 )
         {
             int32_t who = arg.me;
-            printf("This is player %d, I want to build a road at %d.\n", who , where );
+            printf("Okay,I want to build a road at %d.\n", where );
             
             arg.p->resource[1] -= 1;
             arg.p->resource[4] -= 1;
@@ -146,7 +148,7 @@ void ai_set_road( int32_t where , Arg arg )
 
 void ai_set_village( int32_t where , Arg arg )
 {
-    printf("this is ai set viliage\n");
+    //printf("this is ai set viliage\n");
     // check resource
     if( arg.p->resource[1] > 0 &&
         arg.p->resource[2] > 0 &&
@@ -157,7 +159,7 @@ void ai_set_village( int32_t where , Arg arg )
         if( where!=-1 && arg.p->settlement_num<5 )
         {
             int32_t who = arg.me;
-            printf("This is player %d, I want to build a village at %d.\n", who , where );
+            printf("I want to build a village at %d.\n", where );
             
             arg.p->resource[1] -= 1;
             arg.p->resource[2] -= 1;
@@ -187,7 +189,7 @@ void ai_set_village( int32_t where , Arg arg )
 
 void ai_upgrade( int32_t where , Arg arg )
 {
-    printf("this is ai upgrade\n");
+    //printf("this is ai upgrade\n");
     // check resource
     // printf("Brick: %d\n",arg.p->resource[Brick]);
     // printf("Grain: %d\n",arg.p->resource[Grain]);
@@ -202,7 +204,7 @@ void ai_upgrade( int32_t where , Arg arg )
         if( where!=-1 && arg.p->city_num<4 )
         {
             int32_t who = arg.me;
-            printf("This is player %d, I want to build a city at %d.\n", who , where );
+            printf("HA! I want to build a city at %d.\n", where );
             
             arg.p->resource[2] -= 2;
             arg.p->resource[5] -= 3;
@@ -424,7 +426,8 @@ int32_t ai_find_empty_road( Arg arg )
 
 int32_t ai_find_empty_node( Arg arg )
 {
-    printf("this is ai find empty node\n");
+    printf("Let me find some empty nodes...\n");
+    sleep(1);
     int32_t who = arg.me;
     //printf("ai[%d] is finding node...\n",who);
     int32_t ava[54] = {};
@@ -469,6 +472,7 @@ int32_t ai_find_empty_node( Arg arg )
     //printf("this is the end of find empty node\n");
     if( non == 1 )
     {
+        printf("That's too bad...\n");
         return -1;
     }
 
@@ -480,6 +484,7 @@ int32_t ai_find_empty_node( Arg arg )
         if( ava[num] == 1 )
         {   
             //printf("this is end of ai find village\n");
+            printf("Found!!\n");
             return num+1;
         }
         if(num == 53) num = -1;
@@ -527,7 +532,7 @@ int32_t ai_find_village( Arg arg )
 
 void ai_move_robber( int32_t where , Arg arg )
 {
-    printf("this is ai move robber\n");
+    //printf("this is ai move robber\n");
 
     // cut in half
     for(int32_t i=0 ; i<4 ;++i)
@@ -567,6 +572,7 @@ void ai_move_robber( int32_t where , Arg arg )
     {
         target_tile = where-1;
     }
+    printf("I want to move robber to tile %d!!!\n",target_tile+1);
     // find origin and move it
     int32_t origin = -1;
     for( int32_t i=0 ; i<19 ; ++i )
@@ -632,7 +638,7 @@ void ai_move_robber( int32_t where , Arg arg )
             }
         }
     }
-    printf("this is the end of ai move robber.\n");
+    //printf("this is the end of ai move robber.\n");
 }
 
 
