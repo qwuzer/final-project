@@ -300,7 +300,7 @@ void prtRoad( Player * player, road * proad, int32_t road_index[72] ){
 	printf("    ");
 	prt(road_index[55],"56",player->index);
 	printf("    ");
-	prt(road_index[65],"57",player->index);
+	prt(road_index[56],"57",player->index);
 	printf("    ");
 	prt(road_index[57],"58",player->index);
 	printf("    ");
