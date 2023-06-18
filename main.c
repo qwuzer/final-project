@@ -15,7 +15,8 @@ int32_t roll_dice( Player *player )
     int32_t dice1 = rand() % 6 + 1;
     int32_t dice2 = rand() % 6 + 1;
     int32_t sum = dice1 + dice2;
-    printf("Player %d rolled a value of %d\n",player->index,sum);
+   // printf("Player %d rolled a value of %d\n",player->index,sum);
+   sum = 7;
     return sum;
 }
 
@@ -1027,7 +1028,7 @@ void buy_dev_card_func( Player *player , card *pcard , int32_t timestamp  )
     //option[buy_dev_card] = 0; 
 }
 
-void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player is the one who moves the robber, player_start is for the reference of all players
+void moveRobber( tile *ptile , Player *player1 , Player **player_start )//player is the one who moves the robber, player_start is for the reference of all players
 {
     //player with more than 7 cards will lose half of the cards
     for( int32_t i = 0 ; i < 4 ; i++ )
@@ -1035,19 +1036,19 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
         int32_t sum = 0;
         for( int32_t j = 1 ; j < 5 ; j++ )
         {
-            sum += player_start[i].resource[j];
+            sum += player_start[i]->resource[j];
         }
         
         if( sum > 7 )
         {
-            printf("Player%d have a total of %d resources, so player%d will be taken %1.f resources\n",player_start[i].index,sum , player_start[i].index , (floor(sum / 2)));
+            printf("Player%d have a total of %d resources, so player%d will be taken %1.f resources\n",player_start[i]->index,sum , player_start[i]->index , (floor(sum / 2)));
             int32_t cnt = floor(sum / 2);
             for( int32_t j = 0 ; j < cnt ; j++ )
             {
                 int32_t index = rand() % 5 + 1;
-                if( player_start[i].resource[index] != 0 )
+                if( player_start[i]->resource[index] != 0 )
                 {
-                    player_start[i].resource[index] -= 1;
+                    player_start[i]->resource[index] -= 1;
                 }
                 else
                 {
@@ -1137,7 +1138,7 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
 
             //steal a random resource from the player
             int32_t steal_resource = rand() % 5 + 1;
-            while( player_start[select-1].resource[steal_resource] == 0 )
+            while( player_start[select-1]->resource[steal_resource] == 0 )
             {
                 steal_resource = rand() % 5 + 1;
             }
@@ -1146,7 +1147,7 @@ void moveRobber( tile *ptile , Player *player1 , Player *player_start )//player 
             char* resource_string[5] = { "Brick" , "Grain" , "Sheep" , "Lumber" , "Ore" };
             printf("You have stolen 1 %s from player %d\n",resource_string[steal_resource-1],select);
 
-            player_start[select-1].resource[steal_resource] -= 1;
+            player_start[select-1]->resource[steal_resource] -= 1;
             player1->resource[steal_resource] += 1;
         }
     }
@@ -1366,7 +1367,7 @@ void use_dev_card_func( Player *player , Player *p1 , Player *p2 , Player *p3 , 
                 //TODO
                 //move the robber
                 //steal a resource from a player
-                moveRobber( ptile , player , player_start );//not done!1!!
+                moveRobber( ptile , player , &player_start );//not done!1!!
             }
             break;
         case 1:
@@ -1942,7 +1943,7 @@ int main ()
                 dice_val = roll_dice( player[0] );
                 if( dice_val == 7 ) {
                     //printf("Player 1 rolled a 7\n");
-                    moveRobber( pTile , player[0] , player[0]);
+                    moveRobber( pTile , player[0] , player);
                     print_board( pTile, pNode, pRoad , player[0] );
                 } else {
                     obtain_resources( dice_val , player[0] , pTile );
@@ -2028,7 +2029,7 @@ int main ()
                 dice_val = roll_dice( player[1]);
                 if( dice_val == 7 ) {
                     printf("Player 1 rolled a 7\n");
-                    moveRobber( pTile , player[0] , player[0]);
+                    moveRobber( pTile , player[0] , player);
                     print_board( pTile, pNode, pRoad , player[1] );
                 } else {
                     obtain_resources( dice_val , player[0] , pTile );
